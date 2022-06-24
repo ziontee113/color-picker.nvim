@@ -27,6 +27,7 @@ local function detect_colors(str)
 	end
 
 	P(results)
+	return results
 end
 
 -- color: #121221, #122233
@@ -36,9 +37,10 @@ end
 -- color: rgb( 0  , 0 , 0)
 -- color: hsl( 0  , 0 , 0)
 
+--> replacing color under cursor with random text
+
 local function get_current_line()
 	local cur_line = api.nvim_get_current_line()
-
 	return cur_line
 end
 
