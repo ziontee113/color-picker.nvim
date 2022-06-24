@@ -5,7 +5,7 @@ local api = vim.api
 
 local function detect_color(str)
 	local hex_pattern = "#%x%x%x%x%x%x"
-	local rgb_pattern = "rgb%(%d+,%d+,%d+%)"
+	local rgb_pattern = "rgb%(%s*%d+%s*,%s*%d+%s*,%s*%d+%s*%)"
 
 	local hex_match = string.match(str, hex_pattern)
 	local rgb_match = string.match(str, rgb_pattern)
@@ -22,6 +22,7 @@ end
 -- color: #f4f4f4
 -- color: rgb(0,0,0)
 -- color: rgb( 0, 0, 0)
+-- color: rgb( 0  , 0 , 0)
 
 local function get_current_line()
 	local cur_line = api.nvim_get_current_line()
