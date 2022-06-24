@@ -23,6 +23,13 @@ local function detect_color(str)
 	end
 end
 
+local function get_color_at_cursor()
+	--> logic:
+	-- look at matches, their begin & end locations
+	-- if the cursor is in between them, then there's a match
+	-- if the cursor is not, if there's only 1 color on the line, pick that color
+end
+
 -- color: #121221
 -- color: #f4f4f4
 -- color: rgb(0,0,0)
