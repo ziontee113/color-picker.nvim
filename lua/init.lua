@@ -3,7 +3,7 @@
 local M = {}
 local api = vim.api
 
-local function detect_color(str)
+local function detect_colors(str)
 	local hex_pattern = "#%x%x%x%x%x%x"
 	local rgb_pattern = "rgb%(%s*%d+%s*,%s*%d+%s*,%s*%d+%s*%)"
 	local hsl_pattern = "hsl%(%s*%d+%s*,%s*%d+%s*,%s*%d+%s*%)"
@@ -44,7 +44,7 @@ end
 
 vim.keymap.set("n", "<C-A-K>", function()
 	vim.cmd("messages clear")
-	detect_color(get_current_line())
+	detect_colors(get_current_line())
 end, { noremap = true, silent = true })
 
 -- for quickly reload file
