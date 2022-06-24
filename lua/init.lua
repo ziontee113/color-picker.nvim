@@ -8,11 +8,15 @@ local function detect_color(str)
 	local rgb_pattern = "rgb%(%s*%d+%s*,%s*%d+%s*,%s*%d+%s*%)"
 	local hsl_pattern = "hsl%(%s*%d+%s*,%s*%d+%s*,%s*%d+%s*%)"
 
+	local patterns = { hex_pattern, rgb_pattern, hsl_pattern }
 	local results = {}
 
-	for match in string.gmatch(str, hex_pattern) do
-		local hex_match_start, hex_match_end = string.find(str, match)
-		table.insert(results, { hex_match_start, hex_match_end })
+	for _, pattern in ipairs(patterns) do
+		for match in string.gmatch(str, pattern) do
+			N(match)
+			local match_start, match_end = string.find(str, match)
+			table.insert(results, { match_start, match_end })
+		end
 	end
 
 	P(results)
