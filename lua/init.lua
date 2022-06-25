@@ -29,12 +29,6 @@ local function detect_colors(str)
 	return results
 end
 
-local function get_current_line()
-	local cur_line = api.nvim_get_current_line()
-	local cur_line_num = api.nvim_win_get_cursor(0)[1]
-	return cur_line, cur_line_num
-end
-
 -- color: #121221, #122233
 -- color: #f4f4f4
 -- color: rgb(0,0,0)
@@ -45,13 +39,16 @@ end
 --> replacing color under cursor with random text
 
 local function sandwich()
+	-- get cur_line, cur_pos
 	local cur_line = api.nvim_get_current_line()
 	local cur_pos = api.nvim_win_get_cursor(0)
 	local cur_pos_row = cur_pos[1]
 	local cur_pos_col = cur_pos[2]
 
+	-- get colorRanges
 	local colorRanges = detect_colors(cur_line)
 
+	-- loop through colorRanges, find if any sandwiches the cursor
 	for _, color in ipairs(colorRanges) do
 		local start_pos = color[1]
 		local end_pos = color[2]
