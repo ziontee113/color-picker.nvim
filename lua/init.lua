@@ -2,6 +2,7 @@
 
 local M = {}
 local api = vim.api
+local utils_window = require("utils.window")
 
 local function detect_colors(str)
 	local hex_pattern = "#%x%x%x%x%x%x"
@@ -57,25 +58,8 @@ local function sandwich()
 	end
 end
 
-local function test_popup_window()
-	local buf = vim.api.nvim_create_buf(false, true)
-	-- vim.api.nvim_buf_set_option(buf, "modifiable", false)
-	vim.api.nvim_buf_set_option(buf, "filetype", "color-picker")
-
-	local win = vim.api.nvim_open_win(buf, true, {
-		relative = "cursor",
-		width = 20,
-		col = 0,
-		row = 0,
-		style = "minimal",
-		height = 4,
-		-- border = "rounded",
-    border =  {"╭", "─", "╮", "│", "╯", "─", "╰", "│" }
-	})
-end
-
 vim.keymap.set("n", "<C-A-J>", function()
-	test_popup_window()
+	utils_window.pop()
 end, { noremap = true, silent = true })
 vim.keymap.set("n", "<C-A-K>", function()
 	vim.cmd("messages clear")
@@ -83,6 +67,9 @@ vim.keymap.set("n", "<C-A-K>", function()
 end, { noremap = true, silent = true })
 
 -- for quickly reload file
-vim.keymap.set("n", "<A-r>", ":luafile %<cr>", { noremap = true, silent = false })
+vim.keymap.set("n", "<A-r>", function()
+	R("utils.window")
+	vim.cmd([[luafile %]])
+end, { noremap = true, silent = false })
 
 return M
