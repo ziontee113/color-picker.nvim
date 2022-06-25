@@ -36,8 +36,6 @@ end
 -- color: rgb( 0  , 0 , 0)
 -- color: hsl( 0  , 0 , 0)
 
---> replacing color under cursor with random text
-
 local function sandwich()
 	-- get cur_line, cur_pos
 	local cur_line = api.nvim_get_current_line()
@@ -54,7 +52,7 @@ local function sandwich()
 		local end_pos = color[2]
 
 		if start_pos <= cur_pos_col and end_pos >= cur_pos_col then
-			api.nvim_buf_set_text(0, cur_pos_row - 1, start_pos - 1, cur_pos_row - 1, end_pos, { " Rasputin " })
+			api.nvim_buf_set_text(0, cur_pos_row - 1, start_pos - 1, cur_pos_row - 1, end_pos, { color[3] })
 		end
 	end
 end
