@@ -64,12 +64,13 @@ local function test_popup_window()
 
 	local win = vim.api.nvim_open_win(buf, true, {
 		relative = "cursor",
-		width = 30,
+		width = 20,
 		col = 0,
 		row = 0,
 		style = "minimal",
-		height = 5,
-		border = "rounded",
+		height = 4,
+		-- border = "rounded",
+    border =  {"╭", "─", "╮", "│", "╯", "─", "╰", "│" }
 	})
 end
 
