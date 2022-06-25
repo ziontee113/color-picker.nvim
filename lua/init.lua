@@ -26,8 +26,13 @@ local function detect_colors(str)
 		end
 	end
 
-	P(results)
-	return results
+  return results
+end
+
+local function get_current_line()
+	local cur_line = api.nvim_get_current_line()
+	local cur_line_num = api.nvim_win_get_cursor(0)[1]
+	return cur_line, cur_line_num
 end
 
 -- color: #121221, #122233
@@ -39,14 +44,26 @@ end
 
 --> replacing color under cursor with random text
 
-local function get_current_line()
-	local cur_line = api.nvim_get_current_line()
-	return cur_line
+local function sandwich()
+  local cur_line = api.nvim_get_current_line()
+  local cur_pos = api.nvim_win_get_cursor(0)
+  local cur_pos_col = cur_pos[2]
+
+  local colorRanges = detect_colors(cur_line)
+
+  for _, color in ipairs(colorRanges) do
+    local start_pos = color[1]
+    local end_pos = color[2]
+
+    if start_pos <= cur_pos_col and end_pos >= cur_pos_col then
+      P(color[3])
+    end
+  end
 end
 
 vim.keymap.set("n", "<C-A-K>", function()
 	vim.cmd("messages clear")
-	detect_colors(get_current_line())
+  sandwich()
 end, { noremap = true, silent = true })
 
 -- for quickly reload file
