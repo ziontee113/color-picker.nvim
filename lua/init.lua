@@ -57,9 +57,11 @@ local function sandwich()
 	end
 end
 
-local function window_test()
+local function test_popup_window()
 	local buf = vim.api.nvim_create_buf(false, true)
-	vim.api.nvim_buf_set_option(buf, "modifiable", false)
+	-- vim.api.nvim_buf_set_option(buf, "modifiable", false)
+	vim.api.nvim_buf_set_option(buf, "filetype", "color-picker")
+
 	local win = vim.api.nvim_open_win(buf, true, {
 		relative = "cursor",
 		width = 30,
@@ -72,7 +74,7 @@ local function window_test()
 end
 
 vim.keymap.set("n", "<C-A-J>", function()
-	window_test()
+	test_popup_window()
 end, { noremap = true, silent = true })
 vim.keymap.set("n", "<C-A-K>", function()
 	vim.cmd("messages clear")
