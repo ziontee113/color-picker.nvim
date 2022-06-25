@@ -1,5 +1,4 @@
 ---@diagnostic disable: undefined-global
-
 local M = {}
 local api = vim.api
 local utils_window = require("utils.window")
@@ -49,11 +48,12 @@ local function sandwich()
 
 	-- loop through colorRanges, find if any sandwiches the cursor
 	for _, color in ipairs(colorRanges) do
-		local start_pos = color[1]
+		local start_pos = color[1] - 1
 		local end_pos = color[2]
 
 		if start_pos <= cur_pos_col and end_pos >= cur_pos_col then
-			api.nvim_buf_set_text(0, cur_pos_row - 1, start_pos - 1, cur_pos_row - 1, end_pos, { color[3] })
+			api.nvim_buf_set_text(0, cur_pos_row - 1, start_pos, cur_pos_row - 1, end_pos, { color[3] })
+			-- api.nvim_buf_set_text(0, cur_pos_row - 1, start_pos, cur_pos_row - 1, end_pos, { " Love Dive" })
 		end
 	end
 end
@@ -68,8 +68,9 @@ end, { noremap = true, silent = true })
 
 -- for quickly reload file
 vim.keymap.set("n", "<A-r>", function()
-	R("utils.window")
-	vim.cmd([[luafile %]])
+	vim.cmd([[luafile ~/.config/nvim-custom-plugin/color-picker/lua/init.lua]])
+	vim.cmd([[luafile ~/.config/nvim-custom-plugin/color-picker/lua/utils/window.lua]])
+	print("reloaded")
 end, { noremap = true, silent = false })
 
 return M
