@@ -26,7 +26,7 @@ local function detect_colors(str)
 		end
 	end
 
-  return results
+	return results
 end
 
 local function get_current_line()
@@ -45,25 +45,26 @@ end
 --> replacing color under cursor with random text
 
 local function sandwich()
-  local cur_line = api.nvim_get_current_line()
-  local cur_pos = api.nvim_win_get_cursor(0)
-  local cur_pos_col = cur_pos[2]
+	local cur_line = api.nvim_get_current_line()
+	local cur_pos = api.nvim_win_get_cursor(0)
+	local cur_pos_row = cur_pos[1]
+	local cur_pos_col = cur_pos[2]
 
-  local colorRanges = detect_colors(cur_line)
+	local colorRanges = detect_colors(cur_line)
 
-  for _, color in ipairs(colorRanges) do
-    local start_pos = color[1]
-    local end_pos = color[2]
+	for _, color in ipairs(colorRanges) do
+		local start_pos = color[1]
+		local end_pos = color[2]
 
-    if start_pos <= cur_pos_col and end_pos >= cur_pos_col then
-      P(color[3])
-    end
-  end
+		if start_pos <= cur_pos_col and end_pos >= cur_pos_col then
+			api.nvim_buf_set_text(0, cur_pos_row - 1, start_pos - 1, cur_pos_row - 1, end_pos, { " Rasputin " })
+		end
+	end
 end
 
 vim.keymap.set("n", "<C-A-K>", function()
 	vim.cmd("messages clear")
-  sandwich()
+	sandwich()
 end, { noremap = true, silent = true })
 
 -- for quickly reload file
