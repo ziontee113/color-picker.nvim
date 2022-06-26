@@ -262,6 +262,12 @@ local function set_color_line_percent(percent, line)
 	local value = 0
 	if color_mode == "rgb" then
 		value = round(percent / 100 * 255)
+	else
+		if line == 1 then
+			value = round(percent / 100 * 360)
+		else
+			value = percent
+		end
 	end
 
 	local increment = value - color_values[line]
@@ -420,14 +426,30 @@ local function set_mappings() ---set default mappings for popup window{{{
 			set_color_line_percent(100, line)
 		end,
 
-		["q"] = ":q<cr>",
-		["<Esc>"] = ":q<cr>",
+		["s"] = function()
+			change_color_value(10, "decrease")
+		end,
+		["w"] = function()
+			change_color_value(10, "increase")
+		end,
+
+		["a"] = function()
+			change_color_value(5, "decrease")
+		end,
+		["d"] = function()
+			change_color_value(5, "increase")
+		end,
+
 		["h"] = function()
 			change_color_value(1, "decrease")
 		end,
 		["l"] = function()
 			change_color_value(1, "increase")
 		end,
+
+		["q"] = ":q<cr>",
+		["<Esc>"] = ":q<cr>",
+
 		["o"] = function()
 			change_output_type()
 		end,
