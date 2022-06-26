@@ -496,13 +496,25 @@ local function set_mappings() ---set default mappings for popup window{{{
 		["<Leader>1"] = function()
 			set_action_group({ 1, 2 })
 		end,
+		["gu"] = function()
+			set_action_group({ 1, 2 })
+		end,
 		["<Leader>2"] = function()
+			set_action_group({ 2, 3 })
+		end,
+		["gd"] = function()
 			set_action_group({ 2, 3 })
 		end,
 		["<Leader>3"] = function()
 			set_action_group({ 1, 2, 3 })
 		end,
+		["go"] = function()
+			set_action_group({ 1, 2, 3 })
+		end,
 		["<Leader>4"] = function()
+			set_action_group({ 1, 3 })
+		end,
+		["gm"] = function()
 			set_action_group({ 1, 3 })
 		end,
 		["<Leader>0"] = function()
