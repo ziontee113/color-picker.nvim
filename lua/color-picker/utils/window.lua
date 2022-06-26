@@ -317,20 +317,16 @@ local function sandwich_processor(str)
 	local rgb_capture_pattern = "rgb%(%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*%)"
 	local hsl_capture_pattern = "hsl%(%s*(%d+)%s*,%s*(%d+)%s*%%*,%s*(%d+)%s*%%*%)"
 
-	-- color: #121212
-	-- color: #1a1a1a
-	-- color: rgb( 0, 4, 14)
-	-- color: hsl( 222, 12%, 88%)
 	local _, _, r, g, b = string.find(str, rgb_capture_pattern)
 	local _, _, hex = string.find(str, hex_capture_pattern)
 	local _, _, h, s, l = string.find(str, hsl_capture_pattern)
 
 	if hex then
-		return hex
+		return { "hex", hex }
 	elseif r then
-		return { tonumber(r), tonumber(g), tonumber(b) }
+		return { "rgb", tonumber(r), tonumber(g), tonumber(b) }
 	elseif h then
-		return { tonumber(h), tonumber(s), tonumber(l) }
+		return { "hsl", tonumber(h), tonumber(s), tonumber(l) }
 	end
 end
 
@@ -384,14 +380,23 @@ M.pop = function() --{{{
 		border = "rounded",
 	})
 
-	-- detect cursor colors
-	local detected_sandwich = sandwich_detector(target_buf, target_line, target_pos)
-	if detected_sandwich then
-		P(sandwich_processor(detected_sandwich))
-	end
-
 	-- reset color values
 	color_values = { 0, 0, 0 }
+
+	-- detect & try to parse cursor colors
+	local detected_sandwich = sandwich_detector(target_buf, target_line, target_pos)
+	if detected_sandwich then
+		local new_sandwich = sandwich_processor(detected_sandwich)
+
+		if new_sandwich[1] == "rgb" or new_sandwich[1] == "hsl" then
+			color_mode = new_sandwich[1]
+			color_values = { new_sandwich[2], new_sandwich[3], new_sandwich[4] }
+			-- color: #121212
+			-- color: #1a1a1a
+			-- color: rgb( 0, 4, 14)
+			-- color: hsl( 222, 12%, 88%)
+		end
+	end
 
 	set_mappings()
 	create_empty_lines()
