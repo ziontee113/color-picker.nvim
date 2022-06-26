@@ -502,6 +502,9 @@ local function set_mappings() ---set default mappings for popup window{{{
 		["<Leader>3"] = function()
 			set_action_group({ 1, 2, 3 })
 		end,
+		["<Leader>4"] = function()
+			set_action_group({ 1, 3 })
+		end,
 		["<Leader>0"] = function()
 			set_action_group({})
 		end,
@@ -570,7 +573,7 @@ M.pop = function() --{{{
 			color_mode = new_sandwich[1]
 			color_values = { new_sandwich[2], new_sandwich[3], new_sandwich[4] }
 		else
-			local converted_hex = utils.HexToRGB(new_sandwich[2])
+			local converted_hex = HexToRGB(new_sandwich[2])
 			color_mode = "rgb"
 			color_values = { converted_hex[1], converted_hex[2], converted_hex[3] }
 		end
