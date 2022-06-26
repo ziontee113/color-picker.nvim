@@ -8,6 +8,7 @@ local ns = api.nvim_create_namespace("color-picker-popup")
 local color_value_extmarks = {}
 local color_values = { 0, 0, 0 }
 local boxes_extmarks = {}
+local output_extmark = {}
 
 ---create empty lines in the popup so we can set extmarks
 local function create_empty_lines()
@@ -50,7 +51,7 @@ local function setup_virt_text()
 	end
 
 	--- last row
-	ext(3, 0, "rgb(0, 0, 0)", nil, "right_align")
+	output_extmark = ext(3, 0, "rgb(0, 0, 0)", nil, "right_align")
 end
 
 ---shortcut for delete extmarks given an id
@@ -91,6 +92,17 @@ local function update_boxes(line)
 	boxes_extmarks[line] = ext(line - 1, 0, box_string, nil, "right_align")
 end
 
+local function update_output()
+	delete_ext(output_extmark)
+
+	local arg1 = tostring(color_values[1])
+	local arg2 = tostring(color_values[2])
+	local arg3 = tostring(color_values[3])
+
+	local output = "rgb(" .. arg1 .. "," .. arg2 .. "," .. arg3 .. ")"
+	output_extmark = ext(3, 0, output, nil, "right_align")
+end
+
 local function decrease_color_value(increment)
 	local curline = api.nvim_win_get_cursor(0)[1]
 	local colorValue = color_values[curline]
@@ -105,6 +117,7 @@ local function decrease_color_value(increment)
 		color_values[curline] = new_value
 
 		update_boxes(curline)
+		update_output()
 	end
 end
 
@@ -122,6 +135,7 @@ local function increase_color_value(increment)
 		color_values[curline] = new_value
 
 		update_boxes(curline)
+		update_output()
 	end
 end
 
