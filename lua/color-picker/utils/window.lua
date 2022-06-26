@@ -3,13 +3,14 @@ local api = vim.api
 
 local win = nil
 local buf = nil
+local ns = api.nvim_create_namespace("color-picker-popup")
 
 local function set_mappings()
 	local mappings = {
 		["q"] = ":q<cr>",
 		["<Esc>"] = ":q<cr>",
-		["h"] = ":q<cr>",
-		["l"] = ":q<cr>",
+		-- ["h"] = ":q<cr>",
+		-- ["l"] = ":q<cr>",
 	}
 
 	for key, mapping in pairs(mappings) do
@@ -21,17 +22,22 @@ local function center_my_text(str, width)
 	return string.rep(" ", math.floor(width - #str) / 2) .. str
 end
 
+local function align_right_text(str, width)
+	return string.rep(" ", width - #str) .. str
+end
+
 local function create_lines()
 	api.nvim_buf_set_lines(buf, 0, -1, false, {
-		"R",
-		"G",
-		"B",
-		center_my_text("rgb(0,0,0)", 20),
+		"",
+		"",
+		"",
+		-- align_right_text("rgb(0,0,0)", 20),
 	})
 end
 
-local function create_virt_text()
-	-- nvim buf set extmark
+---call this function to update virtual text after modifying color values
+local function update_virt_text()
+	-- api.nvim_buf_set_extmark(buf, ns, ?, ?, ???)
 end
 
 M.pop = function()
@@ -50,7 +56,7 @@ M.pop = function()
 
 	set_mappings()
 	create_lines()
-	create_virt_text()
+	update_virt_text()
 
 	vim.api.nvim_buf_set_option(buf, "modifiable", false)
 end
