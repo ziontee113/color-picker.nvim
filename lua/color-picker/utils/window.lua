@@ -9,9 +9,92 @@ local function rgbToHex(r, g, b) --{{{
 	return string.format("#%02x%02x%02x", r, g, b)
 end --}}}
 
+local function hslToRgb(h, s, l) --{{{
+	h = h / 360
+	s = s / 100
+	l = l / 100
+
+	if s == 0 then
+		return l, l, l
+	end
+	local function to(p, q, t)
+		if t < 0 then
+			t = t + 1
+		end
+		if t > 1 then
+			t = t - 1
+		end
+		if t < 0.16667 then
+			return p + (q - p) * 6 * t
+		end
+		if t < 0.5 then
+			return q
+		end
+		if t < 0.66667 then
+			return p + (q - p) * (0.66667 - t) * 6
+		end
+		return p
+	end
+	local q = l < 0.5 and l * (1 + s) or l + s - l * s
+	local p = 2 * l - q
+	return to(p, q, h + 0.33334), to(p, q, h), to(p, q, h - 0.33334)
+end --}}}
+
+local function round(num, numDecimalPlaces) --{{{
+	return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
+end --}}}
+
+local function RGBToHSL(r, g, b) --{{{
+	-- Make r, g, and b fractions of 1
+	r = r / 255
+	g = g / 255
+	b = b / 255
+
+	local max = math.max(r, g, b)
+	local min = math.min(r, g, b)
+
+	local h = (max + min) / 2
+	local s = (max + min) / 2
+	local l = (max + min) / 2
+
+	if max == min then -- acromatic
+		h = 0
+		s = 0
+	else
+		local d = max - min
+
+		if l > 0.5 then
+			s = d / (2 - max - min)
+		else
+			s = d / (max + min)
+		end
+
+		local x = nil
+		if max == r then
+			if g < b then
+				x = 6
+			else
+				x = 0
+			end
+			h = (g - b) / d + x
+		elseif max == g then
+			h = (b - r) / d + 2
+		elseif max == b then
+			h = (r - g) / d + 4
+		end
+
+		h = round(h / 6 * 360)
+	end
+
+	return "hsl(" .. h .. "," .. round(s * 100, 1) .. "%," .. round(l * 100, 1) .. "%)"
+end --}}}
+
 vim.cmd(":highlight ColorPickerOutput guifg=#c3ccdc")
 
 local output_type = "rgb"
+local color_mode = "rgb"
+
+local color_mode_extmarks = {}
 local color_value_extmarks = {}
 local color_values = { 0, 0, 0 }
 local boxes_extmarks = {}
@@ -38,7 +121,7 @@ local function setup_virt_text() ---create initial virtual text{{{
 	local rgb = { "R", "G", "B" }
 
 	for i, value in ipairs(rgb) do
-		ext(i - 1, 0, value, nil, "overlay")
+		color_mode_extmarks[i] = ext(i - 1, 0, value, nil, "overlay")
 	end
 
 	-- third column
@@ -169,6 +252,23 @@ local function increase_color_value(increment) --{{{
 	end
 end --}}}
 
+local function change_color_mode()
+	if color_mode == "rgb" then
+		-- color_mode = "hsl"
+
+		local hsl = { "H", "S", "L" }
+
+		for i, value in ipairs(hsl) do
+			delete_ext(color_mode_extmarks[i])
+			color_mode_extmarks[i] = ext(i - 1, 0, value, nil, "overlay")
+		end
+
+		P(RGBToHSL(color_values[1], color_values[2], color_values[3]))
+
+		--> update the structure of the extmarks
+	end
+end
+
 local function set_mappings() ---set default mappings for popup window{{{
 	local mappings = {
 		["q"] = ":q<cr>",
@@ -181,6 +281,9 @@ local function set_mappings() ---set default mappings for popup window{{{
 		end,
 		["o"] = function()
 			change_output_type()
+		end,
+		["m"] = function()
+			change_color_mode()
 		end,
 	}
 
