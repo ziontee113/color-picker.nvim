@@ -35,16 +35,23 @@ local function create_empty_lines()
 	})
 end
 
+---a shortcut to create extmarks
+local function ext(row, col, text, hl_group)
+	api.nvim_buf_set_extmark(buf, ns, row, col, {
+		virt_text = { { text, hl_group or "Normal" } },
+		virt_text_pos = "overlay",
+	})
+end
+
 ---call this function to create initial virtual text
 local function create_virt_text()
-	local arr = { "R", "G", "B", align_right_text("rgb(0,0,0)", 20) }
+	local rgb = { "R", "G", "B" }
 
-	for index, value in ipairs(arr) do
-		api.nvim_buf_set_extmark(buf, ns, index - 1, 0, {
-			virt_text = { { value, "Normal" } },
-			virt_text_pos = "overlay",
-		})
+	for index, value in ipairs(rgb) do
+		ext(index - 1, 0, value)
 	end
+
+	ext(3, 0, align_right_text("rgb(0, 0, 0)", 20))
 end
 
 M.pop = function()
