@@ -1,7 +1,7 @@
 ---@diagnostic disable: undefined-global
 local M = {}
 local api = vim.api
-local utils_window = require("utils.window")
+local utils_window = require("color-picker.utils.window")
 
 local function detect_colors(str)
 	local hex_pattern = "#%x%x%x%x%x%x"
@@ -69,8 +69,11 @@ end, { noremap = true, silent = true })
 -- for quickly reload file
 vim.keymap.set("n", "<A-r>", function()
 	vim.cmd([[luafile ~/.config/nvim-custom-plugin/color-picker/lua/init.lua]])
+	R("utils.window")
 	vim.cmd([[luafile ~/.config/nvim-custom-plugin/color-picker/lua/utils/window.lua]])
 	print("reloaded")
 end, { noremap = true, silent = false })
+
+print("hello venus")
 
 return M
