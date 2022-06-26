@@ -252,6 +252,24 @@ local function setup_virt_text() ---create initial virtual text{{{
 end --}}}
 
 -------------------------------------
+
+local function set_color_line_value(value, line)
+	local increment = value - color_values[line]
+	change_color_value(increment, "increase")
+end
+
+local function set_color_line_percent(percent, line)
+	local value = 0
+	if color_mode == "rgb" then
+		value = percent / 100 * 255
+	end
+
+	local increment = value - color_values[line]
+	change_color_value(increment, "increase")
+end
+
+-------------------------------------
+
 local function detect_colors(str) --{{{
 	local hex_pattern = "#%x%x%x%x%x%x"
 	local rgb_pattern = "rgb%(%s*%d+%s*,%s*%d+%s*,%s*%d+%s*%)"
@@ -336,6 +354,7 @@ local function sandwich_processor(str) --{{{
 end --}}}
 
 -------------------------------------
+
 local function apply_color() --{{{
 	sandwich(target_buf, target_line, target_pos, output)
 	api.nvim_win_hide(win)
@@ -343,6 +362,15 @@ end --}}}
 
 local function set_mappings() ---set default mappings for popup window{{{
 	local mappings = {
+		["0"] = function()
+			local line = api.nvim_win_get_cursor(0)[1]
+			set_color_line_percent(0, line)
+		end,
+		[")"] = function()
+			local line = api.nvim_win_get_cursor(0)[1]
+			set_color_line_percent(100, line)
+		end,
+
 		["q"] = ":q<cr>",
 		["<Esc>"] = ":q<cr>",
 		["h"] = function()
