@@ -5,12 +5,21 @@ local win = nil
 local buf = nil
 local ns = api.nvim_create_namespace("color-picker-popup")
 
+local color_values = {}
+local boxes = {}
+
+local function delete_ext(id)
+	api.nvim_buf_del_extmark(buf, ns, id)
+end
+
 local function set_mappings()
 	local mappings = {
 		["q"] = ":q<cr>",
 		["<Esc>"] = ":q<cr>",
-		-- ["h"] = ":q<cr>",
-		-- ["l"] = ":q<cr>",
+		["h"] = function()
+			delete_ext(boxes[1])
+		end,
+		["l"] = ":q<cr>",
 	}
 
 	for key, mapping in pairs(mappings) do
@@ -37,7 +46,7 @@ end
 
 ---a shortcut to create extmarks
 local function ext(row, col, text, hl_group, virt_text_pos)
-	api.nvim_buf_set_extmark(buf, ns, row, col, {
+	return api.nvim_buf_set_extmark(buf, ns, row, col, {
 		virt_text = { { text, hl_group or "Normal" } },
 		virt_text_pos = virt_text_pos or "eol",
 	})
@@ -48,21 +57,21 @@ local function create_virt_text()
 	-- first column
 	local rgb = { "R", "G", "B" }
 
-	for index, value in ipairs(rgb) do
-		ext(index - 1, 0, value, nil, "overlay")
+	for i, value in ipairs(rgb) do
+		ext(i - 1, 0, value, nil, "overlay")
 	end
 
 	-- third column
-	local boxes = { "", "           ", "           " }
-	for index, value in ipairs(boxes) do
-		ext(index - 1, 0, value)
+	local boxes_text = { "", "           ", "           " }
+	for i, value in ipairs(boxes_text) do
+		boxes[i] = ext(i - 1, 0, value)
 	end
 
 	-- second column
-	local color_values = { "   0", "   0", "   0" }
+	local color_values_text = { "   0", "   0", "   0" }
 
-	for index, value in ipairs(color_values) do
-		ext(index - 1, 0, value)
+	for i, value in ipairs(color_values_text) do
+		color_values[i] = ext(i - 1, 0, value)
 	end
 
 	--- last row
