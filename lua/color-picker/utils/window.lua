@@ -500,7 +500,7 @@ local function set_mappings() ---set default mappings for popup window{{{
 			action_color_value(1, "increase")
 		end, --}}}
 
-		["<Leader>1"] = function()
+		["<Leader>1"] = function() --{{{ --- setting action group
 			set_action_group({ 1, 2 })
 		end,
 		["gu"] = function()
@@ -532,7 +532,7 @@ local function set_mappings() ---set default mappings for popup window{{{
 		end,
 		["x"] = function()
 			set_action_group({})
-		end,
+		end, --}}}
 
 		["q"] = ":q<cr>",
 		["<Esc>"] = ":q<cr>",
