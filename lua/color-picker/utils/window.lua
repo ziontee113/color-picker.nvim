@@ -37,18 +37,14 @@ end
 
 ---call this function to update virtual text after modifying color values
 local function create_virt_text()
-	api.nvim_buf_set_extmark(buf, ns, 0, 0, {
-		virt_text = { { "R", "Normal" } },
-		virt_text_pos = "overlay",
-	})
-	api.nvim_buf_set_extmark(buf, ns, 1, 0, {
-		virt_text = { { "G", "Normal" } },
-		virt_text_pos = "overlay",
-	})
-	api.nvim_buf_set_extmark(buf, ns, 2, 0, {
-		virt_text = { { "B", "Normal" } },
-		virt_text_pos = "overlay",
-	})
+	local arr = { "R", "G", "B" }
+
+	for index, value in ipairs(arr) do
+		api.nvim_buf_set_extmark(buf, ns, index - 1, 0, {
+			virt_text = { { value, "Normal" } },
+			virt_text_pos = "overlay",
+		})
+	end
 end
 
 M.pop = function()
