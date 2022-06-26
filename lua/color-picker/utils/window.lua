@@ -14,6 +14,7 @@ local hslToHex = utils.hslToHex
 local HexToRGB = utils.HexToRGB
 
 vim.cmd(":highlight ColorPickerOutput guifg=#white")
+vim.cmd(":highlight ColorPickerActionGroup guifg=#00F1F5")
 
 local output_type = "rgb"
 local color_mode = "rgb"
@@ -24,6 +25,7 @@ local color_values = { 0, 0, 0 }
 local boxes_extmarks = {}
 local output_extmark = {}
 local output = nil
+local action_group = {}
 
 local target_buf = nil
 local target_line = nil
@@ -61,6 +63,14 @@ local function set_color_marks(marks) --{{{
 
 	for i, value in ipairs(t) do
 		color_mode_extmarks[i] = ext(i - 1, 0, string.upper(value), nil, "overlay")
+	end
+
+	-- action_group
+	if #action_group > 0 then
+		for _, line in ipairs(action_group) do
+			delete_ext(color_mode_extmarks[line])
+			color_mode_extmarks[line] = ext(line - 1, 0, string.upper(t[line]), "ColorPickerActionGroup", "overlay")
+		end
 	end
 end --}}}
 
@@ -253,12 +263,12 @@ end --}}}
 
 -------------------------------------
 
-local function set_color_line_value(value, line)
+local function set_color_line_value(value, line) --{{{
 	local increment = value - color_values[line]
 	change_color_value(increment, "increase")
-end
+end --}}}
 
-local function set_color_line_percent(percent, line)
+local function set_color_line_percent(percent, line) --{{{
 	local value = 0
 	if color_mode == "rgb" then
 		value = round(percent / 100 * 255)
@@ -272,6 +282,14 @@ local function set_color_line_percent(percent, line)
 
 	local increment = value - color_values[line]
 	change_color_value(increment, "increase")
+end --}}}
+
+-------------------------------------
+
+local function set_group(group)
+	action_group = group
+
+	set_color_marks(color_mode)
 end
 
 -------------------------------------
@@ -447,6 +465,16 @@ local function set_mappings() ---set default mappings for popup window{{{
 			change_color_value(1, "increase")
 		end, --}}}
 
+		["<Leader>1"] = function()
+			set_group({ 1, 2 })
+		end,
+		["<Leader>2"] = function()
+			set_group({ 2, 3 })
+		end,
+		["<Leader>3"] = function()
+			set_group({ 1, 2, 3 })
+		end,
+
 		["q"] = ":q<cr>",
 		["<Esc>"] = ":q<cr>",
 
@@ -484,14 +512,13 @@ M.pop = function() --{{{
 		border = "rounded",
 	})
 
-	-- reset color values
+	-- reset color values & initialize the UI
 	color_values = { 0, 0, 0 }
-
 	set_mappings()
 	create_empty_lines()
 	setup_virt_text()
 
-	-- detect & try to parse cursor colors
+	-- detect & try to parse cursor colors{{{
 	local detected_sandwich = sandwich_detector(target_buf, target_line, target_pos)
 	if detected_sandwich then
 		local new_sandwich = sandwich_processor(detected_sandwich)
@@ -514,7 +541,7 @@ M.pop = function() --{{{
 		update_number(1, 0)
 		update_number(2, 0)
 		update_number(3, 0)
-	end
+	end --}}}
 
 	vim.api.nvim_buf_set_option(buf, "modifiable", false)
 end --}}}
