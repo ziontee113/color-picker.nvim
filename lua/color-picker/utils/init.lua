@@ -1,5 +1,10 @@
 local M = {}
 
+M.HexToRGB = function(hex) --{{{
+	hex = hex:gsub("#", "")
+	return { tonumber("0x" .. hex:sub(1, 2)), tonumber("0x" .. hex:sub(3, 4)), tonumber("0x" .. hex:sub(5, 6)) }
+end --}}}
+
 M.rgbToHex = function(r, g, b) --{{{
 	return string.format("#%02x%02x%02x", r, g, b)
 end --}}}

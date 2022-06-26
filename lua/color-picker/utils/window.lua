@@ -11,6 +11,7 @@ local round = utils.round
 local HSLToRGB = utils.HSLToRGB
 local RGBToHSL = utils.RGBToHSL
 local hslToHex = utils.hslToHex
+local HexToRGB = utils.HexToRGB
 
 vim.cmd(":highlight ColorPickerOutput guifg=#white")
 
@@ -392,18 +393,24 @@ M.pop = function() --{{{
 	if detected_sandwich then
 		local new_sandwich = sandwich_processor(detected_sandwich)
 
+		-- color: #121212
+		-- color: #1a1a1a
+		-- color: rgb( 0, 4, 14)
+		-- color: hsl( 222, 12%, 88%)
+
 		if new_sandwich[1] == "rgb" or new_sandwich[1] == "hsl" then
 			color_mode = new_sandwich[1]
 			color_values = { new_sandwich[2], new_sandwich[3], new_sandwich[4] }
-			-- color: #121212
-			-- color: #1a1a1a
-			-- color: rgb( 0, 4, 14)
-			-- color: hsl( 222, 12%, 88%)
-			set_color_marks(color_mode)
-			update_number(1, 0)
-			update_number(2, 0)
-			update_number(3, 0)
+		else
+			local converted_hex = utils.HexToRGB(new_sandwich[2])
+			color_mode = "rgb"
+			color_values = { converted_hex[1], converted_hex[2], converted_hex[3] }
 		end
+
+		set_color_marks(color_mode)
+		update_number(1, 0)
+		update_number(2, 0)
+		update_number(3, 0)
 	end
 
 	vim.api.nvim_buf_set_option(buf, "modifiable", false)
