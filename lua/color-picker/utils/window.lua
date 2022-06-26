@@ -1,97 +1,16 @@
 local M = {}
 local api = vim.api
+local utils = require("color-picker.utils")
 
 local win = nil
 local buf = nil
 local ns = api.nvim_create_namespace("color-picker-popup")
 
-local function rgbToHex(r, g, b) --{{{
-	return string.format("#%02x%02x%02x", r, g, b)
-end --}}}
-
-local function round(num, numDecimalPlaces) --{{{
-	return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
-end
-
-local function HSLToRGB(h, s, l) --{{{
-	h = h / 360
-	s = s / 100
-	l = l / 100
-
-	local function to(p, q, t)
-		if t < 0 then
-			t = t + 1
-		end
-		if t > 1 then
-			t = t - 1
-		end
-		if t < 0.16667 then
-			return p + (q - p) * 6 * t
-		end
-		if t < 0.5 then
-			return q
-		end
-		if t < 0.66667 then
-			return p + (q - p) * (0.66667 - t) * 6
-		end
-		return p
-	end
-
-	local q = l < 0.5 and l * (1 + s) or l + s - l * s
-	local p = 2 * l - q
-
-	return { round(to(p, q, h + 0.33334) * 255), round(to(p, q, h) * 255), round(to(p, q, h - 0.33334) * 255) }
-end --}}}
-
-local function RGBToHSL(r, g, b) --{{{
-	-- Make r, g, and b fractions of 1
-	r = r / 255
-	g = g / 255
-	b = b / 255
-
-	local max = math.max(r, g, b)
-	local min = math.min(r, g, b)
-
-	local h = (max + min) / 2
-	local s = (max + min) / 2
-	local l = (max + min) / 2
-
-	if max == min then -- acromatic
-		h = 0
-		s = 0
-	else
-		local d = max - min
-
-		if l > 0.5 then
-			s = d / (2 - max - min)
-		else
-			s = d / (max + min)
-		end
-
-		local x = nil
-		if max == r then
-			if g < b then
-				x = 6
-			else
-				x = 0
-			end
-			h = (g - b) / d + x
-		elseif max == g then
-			h = (b - r) / d + 2
-		elseif max == b then
-			h = (r - g) / d + 4
-		end
-
-		h = round(h / 6 * 360)
-	end
-
-	return { h, round(s * 100, 0), round(l * 100, 0) }
-end --}}}
-
-local function hslToHex(h, s, l)
-	local rgb = HSLToRGB(h, s, l)
-	return rgbToHex(rgb[1], rgb[2], rgb[3])
-end --}}}
+local rgbToHex = utils.rgbToHex
+local round = utils.round
+local HSLToRGB = utils.HSLToRGB
+local RGBToHSL = utils.RGBToHSL
+local hslToHex = utils.hslToHex
 
 vim.cmd(":highlight ColorPickerOutput guifg=#white")
 
@@ -324,6 +243,8 @@ local function setup_virt_text() ---create initial virtual text{{{
 	output_extmark = ext(3, 0, "rgb(0,0,0)", nil, "right_align")
 end --}}}
 
+local function apply_color() end
+
 local function set_mappings() ---set default mappings for popup window{{{
 	local mappings = {
 		["q"] = ":q<cr>",
@@ -339,6 +260,9 @@ local function set_mappings() ---set default mappings for popup window{{{
 		end,
 		["r"] = function()
 			change_color_mode()
+		end,
+		["<CR>"] = function()
+			apply_color()
 		end,
 	}
 
