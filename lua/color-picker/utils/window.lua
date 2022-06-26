@@ -37,7 +37,7 @@ local function setup_virt_text()
 	end
 
 	-- third column
-	local boxes_text = { "", "           ", "           " }
+	local boxes_text = { "", "", "" }
 	for i, value in ipairs(boxes_text) do
 		boxes_extmarks[i] = ext(i - 1, 0, value, nil, "right_align")
 	end
@@ -77,7 +77,7 @@ local function update_boxes(line)
 	local box_string = ""
 
 	if arithmetic ~= 0 then
-		box_string = ""
+		box_string = ""
 	end
 
 	for i = 1, floor, 1 do
