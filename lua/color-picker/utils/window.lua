@@ -18,10 +18,6 @@ local function HSLToRGB(h, s, l) --{{{
 	s = s / 100
 	l = l / 100
 
-	if s == 0 then
-		return { l, l, l }
-	end
-
 	local function to(p, q, t)
 		if t < 0 then
 			t = t + 1
@@ -179,11 +175,11 @@ local function update_boxes(line) --{{{
 		box_string = " "
 	end
 
-	for i = 1, floor, 1 do
+	for _ = 1, floor, 1 do
 		box_string = "ﱢ" .. box_string
 	end
 
-	for i = 1, 10 - floor do
+	for _ = 1, 10 - floor do
 		box_string = box_string .. " "
 	end
 
@@ -192,7 +188,13 @@ end --}}}
 
 local function get_fg_color() --{{{
 	local fg_color = "white"
-	if (color_values[1] + color_values[2] + color_values[3]) > 300 then
+	local rgb = color_values
+
+	if color_mode == "hsl" then
+		rgb = HSLToRGB(color_values[1], color_values[2], color_values[3])
+	end
+
+	if (rgb[1] + rgb[2] + rgb[3]) > 300 then
 		fg_color = "black"
 	end
 
@@ -351,7 +353,7 @@ M.pop = function() --{{{
 
 	win = vim.api.nvim_open_win(buf, true, {
 		relative = "cursor",
-		width = 17,
+		width = 18,
 		col = 0,
 		row = 0,
 		style = "minimal",
