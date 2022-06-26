@@ -310,7 +310,14 @@ local function action_color_value(increment, modify) --{{{
 			change_color_value(increment, modify, line)
 		end
 	else
-		change_color_value(increment, modify)
+		local curline = api.nvim_win_get_cursor(0)[1]
+		if curline > 3 then
+			for line = 1, 3 do
+				change_color_value(increment, modify, line)
+			end
+		else
+			change_color_value(increment, modify)
+		end
 	end
 end --}}}
 
