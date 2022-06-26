@@ -11,7 +11,7 @@ end --}}}
 
 local function round(num, numDecimalPlaces) --{{{
 	return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
-end --}}}
+end
 
 local function HSLToRGB(h, s, l) --{{{
 	h = h / 360
@@ -90,6 +90,11 @@ local function RGBToHSL(r, g, b) --{{{
 	end
 
 	return { h, round(s * 100, 0), round(l * 100, 0) }
+end --}}}
+
+local function hslToHex(h, s, l)
+	local rgb = HSLToRGB(h, s, l)
+	return rgbToHex(rgb[1], rgb[2], rgb[3])
 end --}}}
 
 vim.cmd(":highlight ColorPickerOutput guifg=#white")
@@ -210,7 +215,12 @@ local function update_output() --{{{
 
 	local fg_color = get_fg_color()
 
-	vim.cmd(":highlight ColorPickerOutput guifg=" .. fg_color .. " guibg=" .. rgbToHex(arg1, arg2, arg3))
+	if color_mode == "rgb" then
+		vim.cmd(":highlight ColorPickerOutput guifg=" .. fg_color .. " guibg=" .. rgbToHex(arg1, arg2, arg3))
+	elseif color_mode == "hsl" then
+		vim.cmd(":highlight ColorPickerOutput guifg=" .. fg_color .. " guibg=" .. hslToHex(arg1, arg2, arg3))
+	end
+
 	output_extmark = ext(3, 0, output, "ColorPickerOutput", "right_align")
 end --}}}
 
@@ -284,7 +294,9 @@ local function change_color_mode() --{{{
 	end
 
 	set_color_marks(color_mode)
-	change_color_value(0)
+	update_number(1, 0)
+	update_number(2, 0)
+	update_number(3, 0)
 end --}}}
 
 local function setup_virt_text() ---create initial virtual text{{{
