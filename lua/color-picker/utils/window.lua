@@ -368,7 +368,7 @@ end --}}}
 
 local function set_mappings() ---set default mappings for popup window{{{
 	local mappings = {
-		["M"] = function()
+		["M"] = function() --{{{ HML percent set
 			local line = api.nvim_win_get_cursor(0)[1]
 			set_color_line_percent(50, line)
 		end,
@@ -379,9 +379,9 @@ local function set_mappings() ---set default mappings for popup window{{{
 		["L"] = function()
 			local line = api.nvim_win_get_cursor(0)[1]
 			set_color_line_percent(100, line)
-		end,
+		end, --}}}
 
-		["0"] = function()
+		["0"] = function() --{{{ 0-9 ) percent set
 			local line = api.nvim_win_get_cursor(0)[1]
 			set_color_line_percent(0, line)
 		end,
@@ -424,9 +424,9 @@ local function set_mappings() ---set default mappings for popup window{{{
 		[")"] = function()
 			local line = api.nvim_win_get_cursor(0)[1]
 			set_color_line_percent(100, line)
-		end,
+		end, --}}}
 
-		["s"] = function()
+		["s"] = function() --{{{ wasd hl increment
 			change_color_value(10, "decrease")
 		end,
 		["w"] = function()
@@ -445,7 +445,7 @@ local function set_mappings() ---set default mappings for popup window{{{
 		end,
 		["l"] = function()
 			change_color_value(1, "increase")
-		end,
+		end, --}}}
 
 		["q"] = ":q<cr>",
 		["<Esc>"] = ":q<cr>",
