@@ -161,7 +161,7 @@ local function update_boxes(line) --{{{
 	if color_mode == "rgb" then
 		floor = math.floor(color_values[line] / 25.5)
 		arithmetic = color_values[line] / 25.5 - floor
-	else
+	elseif color_mode == "hsl" then
 		if line == 1 then
 			floor = math.floor(color_values[line] / 36)
 			arithmetic = color_values[line] / 36 - floor
@@ -175,13 +175,15 @@ local function update_boxes(line) --{{{
 
 	if arithmetic ~= 0 then
 		box_string = ""
+	else
+		box_string = " "
 	end
 
 	for i = 1, floor, 1 do
 		box_string = "ﱢ" .. box_string
 	end
 
-	for i = 2, 10 - floor do
+	for i = 1, 10 - floor do
 		box_string = box_string .. " "
 	end
 
@@ -325,10 +327,10 @@ local function set_mappings() ---set default mappings for popup window{{{
 		["q"] = ":q<cr>",
 		["<Esc>"] = ":q<cr>",
 		["h"] = function()
-			change_color_value(5, "decrease")
+			change_color_value(1, "decrease")
 		end,
 		["l"] = function()
-			change_color_value(5, "increase")
+			change_color_value(1, "increase")
 		end,
 		["o"] = function()
 			change_output_type()
