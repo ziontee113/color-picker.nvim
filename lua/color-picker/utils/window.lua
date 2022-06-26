@@ -31,13 +31,13 @@ local function create_empty_lines()
 		"",
 		"",
 		"",
-		-- align_right_text("rgb(0,0,0)", 20),
+		"",
 	})
 end
 
----call this function to update virtual text after modifying color values
+---call this function to create initial virtual text
 local function create_virt_text()
-	local arr = { "R", "G", "B" }
+	local arr = { "R", "G", "B", align_right_text("rgb(0,0,0)", 20) }
 
 	for index, value in ipairs(arr) do
 		api.nvim_buf_set_extmark(buf, ns, index - 1, 0, {
