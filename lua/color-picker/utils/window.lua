@@ -36,22 +36,37 @@ local function create_empty_lines()
 end
 
 ---a shortcut to create extmarks
-local function ext(row, col, text, hl_group)
+local function ext(row, col, text, hl_group, virt_text_pos)
 	api.nvim_buf_set_extmark(buf, ns, row, col, {
 		virt_text = { { text, hl_group or "Normal" } },
-		virt_text_pos = "overlay",
+		virt_text_pos = virt_text_pos or "eol",
 	})
 end
 
 ---call this function to create initial virtual text
 local function create_virt_text()
+	-- first column
 	local rgb = { "R", "G", "B" }
 
 	for index, value in ipairs(rgb) do
+		ext(index - 1, 0, value, nil, "overlay")
+	end
+
+	-- third column
+	local boxes = { "", "           ", "           " }
+	for index, value in ipairs(boxes) do
 		ext(index - 1, 0, value)
 	end
 
-	ext(3, 0, align_right_text("rgb(0, 0, 0)", 20))
+	-- second column
+	local color_values = { "   0", "   0", "   0" }
+
+	for index, value in ipairs(color_values) do
+		ext(index - 1, 0, value)
+	end
+
+	--- last row
+	ext(3, 0, "rgb(0, 0, 0)", nil, "right_align")
 end
 
 M.pop = function()
@@ -60,7 +75,7 @@ M.pop = function()
 
 	win = vim.api.nvim_open_win(buf, true, {
 		relative = "cursor",
-		width = 20,
+		width = 17,
 		col = 0,
 		row = 0,
 		style = "minimal",
