@@ -109,6 +109,10 @@ local function create_empty_lines() ---create empty lines in the popup so we can
 	})
 end --}}}
 
+local function delete_ext(id) -- shortcut for delete extmarks given an id{{{
+	api.nvim_buf_del_extmark(buf, ns, id)
+end
+
 local function ext(row, col, text, hl_group, virt_text_pos) ---shortcut to create extmarks{{{
 	return api.nvim_buf_set_extmark(buf, ns, row, col, {
 		virt_text = { { text, hl_group or "Normal" } },
@@ -116,13 +120,24 @@ local function ext(row, col, text, hl_group, virt_text_pos) ---shortcut to creat
 	})
 end --}}}
 
+local function set_color_marks(marks)
+	local t = {}
+	marks:gsub(".", function(c)
+		table.insert(t, c)
+	end)
+
+	for _, value in ipairs(color_mode_extmarks) do
+		delete_ext(value)
+	end
+
+	for i, value in ipairs(t) do
+		color_mode_extmarks[i] = ext(i - 1, 0, string.upper(value), nil, "overlay")
+	end
+end
+
 local function setup_virt_text() ---create initial virtual text{{{
 	-- first column
-	local rgb = { "R", "G", "B" }
-
-	for i, value in ipairs(rgb) do
-		color_mode_extmarks[i] = ext(i - 1, 0, value, nil, "overlay")
-	end
+	set_color_marks(color_mode)
 
 	-- third column
 	local boxes_text = { "", "", "" }
@@ -140,10 +155,6 @@ local function setup_virt_text() ---create initial virtual text{{{
 	--- last row
 	output_extmark = ext(3, 0, "rgb(0,0,0)", nil, "right_align")
 end --}}}
-
-local function delete_ext(id) -- shortcut for delete extmarks given an id{{{
-	api.nvim_buf_del_extmark(buf, ns, id)
-end
 
 local function string_fix_right(str, width)
 	if type(str) == "number" then
@@ -254,19 +265,12 @@ end --}}}
 
 local function change_color_mode()
 	if color_mode == "rgb" then
-		-- color_mode = "hsl"
-
-		local hsl = { "H", "S", "L" }
-
-		for i, value in ipairs(hsl) do
-			delete_ext(color_mode_extmarks[i])
-			color_mode_extmarks[i] = ext(i - 1, 0, value, nil, "overlay")
-		end
-
-		P(RGBToHSL(color_values[1], color_values[2], color_values[3]))
-
-		--> update the structure of the extmarks
+		color_mode = "hsl"
+	else
+		color_mode = "rgb"
 	end
+
+	set_color_marks(color_mode)
 end
 
 local function set_mappings() ---set default mappings for popup window{{{
@@ -282,7 +286,7 @@ local function set_mappings() ---set default mappings for popup window{{{
 		["o"] = function()
 			change_output_type()
 		end,
-		["m"] = function()
+		["r"] = function()
 			change_color_mode()
 		end,
 	}
@@ -315,8 +319,4 @@ M.pop = function() --{{{
 
 	vim.api.nvim_buf_set_option(buf, "modifiable", false)
 end --}}}
-
-vim.keymap.set("n", "<C-A-L>", function()
-	P(HSLtoRGB(30, 25, 5))
-end, { noremap = true, silent = true })
 return M
