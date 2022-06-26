@@ -5,9 +5,9 @@ local win = nil
 local buf = nil
 local ns = api.nvim_create_namespace("color-picker-popup")
 
-local function rgbToHex(r, g, b)
+local function rgbToHex(r, g, b) --{{{
 	return string.format("#%02x%02x%02x", r, g, b)
-end
+end --}}}
 
 vim.cmd(":highlight ColorPickerOutput guifg=#c3ccdc")
 
@@ -17,26 +17,23 @@ local color_values = { 0, 0, 0 }
 local boxes_extmarks = {}
 local output_extmark = {}
 
----create empty lines in the popup so we can set extmarks
-local function create_empty_lines()
+local function create_empty_lines() ---create empty lines in the popup so we can set extmarks{{{
 	api.nvim_buf_set_lines(buf, 0, -1, false, {
 		"",
 		"",
 		"",
 		"",
 	})
-end
+end --}}}
 
----shortcut to create extmarks
-local function ext(row, col, text, hl_group, virt_text_pos)
+local function ext(row, col, text, hl_group, virt_text_pos) ---shortcut to create extmarks{{{
 	return api.nvim_buf_set_extmark(buf, ns, row, col, {
 		virt_text = { { text, hl_group or "Normal" } },
 		virt_text_pos = virt_text_pos or "eol",
 	})
-end
+end --}}}
 
----create initial virtual text
-local function setup_virt_text()
+local function setup_virt_text() ---create initial virtual text{{{
 	-- first column
 	local rgb = { "R", "G", "B" }
 
@@ -59,10 +56,9 @@ local function setup_virt_text()
 
 	--- last row
 	output_extmark = ext(3, 0, "rgb(0,0,0)", nil, "right_align")
-end
+end --}}}
 
----shortcut for delete extmarks given an id
-local function delete_ext(id)
+local function delete_ext(id) -- shortcut for delete extmarks given an id{{{
 	api.nvim_buf_del_extmark(buf, ns, id)
 end
 
@@ -74,9 +70,9 @@ local function string_fix_right(str, width)
 	local number_of_spaces = width - #str
 
 	return string.rep(" ", number_of_spaces) .. str
-end
+end --}}}
 
-local function update_boxes(line)
+local function update_boxes(line) --{{{
 	delete_ext(boxes_extmarks[line])
 
 	local floor = math.floor(color_values[line] / 25.5)
@@ -97,9 +93,18 @@ local function update_boxes(line)
 	end
 
 	boxes_extmarks[line] = ext(line - 1, 0, box_string, nil, "right_align")
-end
+end --}}}
 
-local function update_output()
+local function get_fg_color() --{{{
+	local fg_color = "white"
+	if (color_values[1] + color_values[2] + color_values[3]) > 300 then
+		fg_color = "black"
+	end
+
+	return fg_color
+end --}}}
+
+local function update_output() --{{{
 	delete_ext(output_extmark)
 
 	local arg1 = tostring(color_values[1])
@@ -108,16 +113,27 @@ local function update_output()
 
 	local output = "rgb(" .. arg1 .. "," .. arg2 .. "," .. arg3 .. ")"
 
-	local fg_color = "white"
-	if (arg1 + arg2 + arg3) > 300 then
-		fg_color = "black"
-	end
+	local fg_color = get_fg_color()
 
 	vim.cmd(":highlight ColorPickerOutput guifg=" .. fg_color .. " guibg=" .. rgbToHex(arg1, arg2, arg3))
 	output_extmark = ext(3, 0, output, "ColorPickerOutput", "right_align")
-end
+end --}}}
 
-local function decrease_color_value(increment)
+local function change_output_type() --{{{
+	if output_type == "rgb" then
+		output_type = "hex"
+
+		local output = rgbToHex(color_values[1], color_values[2], color_values[3])
+
+		local fg_color = get_fg_color()
+
+		delete_ext(output_extmark)
+		vim.cmd(":highlight ColorPickerOutput guifg=" .. fg_color .. " guibg=" .. output)
+		output_extmark = ext(3, 0, output, "ColorPickerOutput", "right_align")
+	end
+end --}}}
+
+local function decrease_color_value(increment) --{{{
 	local curline = api.nvim_win_get_cursor(0)[1]
 	local colorValue = color_values[curline]
 
@@ -133,9 +149,9 @@ local function decrease_color_value(increment)
 		update_boxes(curline)
 		update_output()
 	end
-end
+end --}}}
 
-local function increase_color_value(increment)
+local function increase_color_value(increment) --{{{
 	local curline = api.nvim_win_get_cursor(0)[1]
 	local colorValue = color_values[curline]
 
@@ -151,26 +167,9 @@ local function increase_color_value(increment)
 		update_boxes(curline)
 		update_output()
 	end
-end
+end --}}}
 
-local function change_output_type()
-	if output_type == "rgb" then
-		output_type = "hex"
-
-		local output = rgbToHex(color_values[1], color_values[2], color_values[3])
-
-		local fg_color = "white"
-		if (color_values[1] + color_values[2] + color_values[3]) > 300 then
-			fg_color = "black"
-		end
-
-		delete_ext(output_extmark)
-		vim.cmd(":highlight ColorPickerOutput guifg=" .. fg_color .. " guibg=" .. output)
-		output_extmark = ext(3, 0, output, "ColorPickerOutput", "right_align")
-	end
-end
-
-local function set_mappings() ---set default mappings for popup window
+local function set_mappings() ---set default mappings for popup window{{{
 	local mappings = {
 		["q"] = ":q<cr>",
 		["<Esc>"] = ":q<cr>",
@@ -188,9 +187,9 @@ local function set_mappings() ---set default mappings for popup window
 	for key, mapping in pairs(mappings) do
 		vim.keymap.set("n", key, mapping, { buffer = buf, silent = true })
 	end
-end
+end --}}}
 
-M.pop = function()
+M.pop = function() --{{{
 	buf = vim.api.nvim_create_buf(false, true)
 	vim.api.nvim_buf_set_option(buf, "filetype", "color-picker")
 
@@ -212,6 +211,6 @@ M.pop = function()
 	setup_virt_text()
 
 	vim.api.nvim_buf_set_option(buf, "modifiable", false)
-end
+end --}}}
 
 return M
