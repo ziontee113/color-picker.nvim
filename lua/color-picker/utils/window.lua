@@ -188,8 +188,8 @@ local function update_number(curline, increment) --{{{
 	update_output()
 end --}}}
 
-local function change_color_value(increment, modify) --{{{
-	local curline = api.nvim_win_get_cursor(0)[1]
+local function change_color_value(increment, modify, line) --{{{
+	local curline = line or api.nvim_win_get_cursor(0)[1]
 	local colorValue = color_values[curline]
 
 	if modify == "increase" then
@@ -286,11 +286,17 @@ end --}}}
 
 -------------------------------------
 
-local function set_group(group)
+local function action_color_value(increment, modify)
+	for _, line in ipairs(action_group) do
+		change_color_value(increment, modify, line)
+	end
+end
+
+local function set_action_group(group) --{{{
 	action_group = group
 
 	set_color_marks(color_mode)
-end
+end --}}}
 
 -------------------------------------
 
@@ -459,20 +465,20 @@ local function set_mappings() ---set default mappings for popup window{{{
 		end,
 
 		["h"] = function()
-			change_color_value(1, "decrease")
+			action_color_value(1, "decrease")
 		end,
 		["l"] = function()
-			change_color_value(1, "increase")
+			action_color_value(1, "increase")
 		end, --}}}
 
 		["<Leader>1"] = function()
-			set_group({ 1, 2 })
+			set_action_group({ 1, 2 })
 		end,
 		["<Leader>2"] = function()
-			set_group({ 2, 3 })
+			set_action_group({ 2, 3 })
 		end,
 		["<Leader>3"] = function()
-			set_group({ 1, 2, 3 })
+			set_action_group({ 1, 2, 3 })
 		end,
 
 		["q"] = ":q<cr>",
@@ -512,8 +518,9 @@ M.pop = function() --{{{
 		border = "rounded",
 	})
 
-	-- reset color values & initialize the UI
+	-- reset color values, action_group & initialize the UI
 	color_values = { 0, 0, 0 }
+	action_group = {}
 	set_mappings()
 	create_empty_lines()
 	setup_virt_text()
