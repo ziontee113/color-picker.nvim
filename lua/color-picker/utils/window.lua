@@ -26,7 +26,7 @@ local function align_right_text(str, width)
 	return string.rep(" ", width - #str) .. str
 end
 
-local function create_lines()
+local function create_empty_lines()
 	api.nvim_buf_set_lines(buf, 0, -1, false, {
 		"",
 		"",
@@ -36,8 +36,19 @@ local function create_lines()
 end
 
 ---call this function to update virtual text after modifying color values
-local function update_virt_text()
-	-- api.nvim_buf_set_extmark(buf, ns, ?, ?, ???)
+local function create_virt_text()
+	api.nvim_buf_set_extmark(buf, ns, 0, 0, {
+		virt_text = { { "R", "Normal" } },
+		virt_text_pos = "overlay",
+	})
+	api.nvim_buf_set_extmark(buf, ns, 1, 0, {
+		virt_text = { { "G", "Normal" } },
+		virt_text_pos = "overlay",
+	})
+	api.nvim_buf_set_extmark(buf, ns, 2, 0, {
+		virt_text = { { "B", "Normal" } },
+		virt_text_pos = "overlay",
+	})
 end
 
 M.pop = function()
@@ -55,8 +66,8 @@ M.pop = function()
 	})
 
 	set_mappings()
-	create_lines()
-	update_virt_text()
+	create_empty_lines()
+	create_virt_text()
 
 	vim.api.nvim_buf_set_option(buf, "modifiable", false)
 end
