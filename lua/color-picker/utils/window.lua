@@ -135,7 +135,11 @@ local function update_output() --{{{
 	if output_type == "rgb" then
 		output = "rgb(" .. arg1 .. "," .. arg2 .. "," .. arg3 .. ")"
 	elseif output_type == "hex" then
-		output = rgbToHex(arg1, arg2, arg3)
+		if color_mode == "rgb" then
+			output = rgbToHex(arg1, arg2, arg3)
+		else
+			output = hslToHex(arg1, arg2, arg3)
+		end
 	elseif output_type == "hsl" then
 		output = "hsl(" .. arg1 .. "," .. arg2 .. "%," .. arg3 .. "%)"
 	end
@@ -393,8 +397,8 @@ M.pop = function() --{{{
 	if detected_sandwich then
 		local new_sandwich = sandwich_processor(detected_sandwich)
 
-		-- color: #121212
-		-- color: #1a1a1a
+		-- color: #b5b5b5
+		-- color: #00004b
 		-- color: rgb( 0, 4, 14)
 		-- color: hsl( 222, 12%, 88%)
 
