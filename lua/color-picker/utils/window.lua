@@ -5,8 +5,9 @@ local win = nil
 local buf = nil
 local ns = api.nvim_create_namespace("color-picker-popup")
 
-local color_values = {}
-local boxes = {}
+local color_value_extmarks = {}
+local color_values = { 0, 0, 0 }
+local boxes_extmarks = {}
 
 ---create empty lines in the popup so we can set extmarks
 local function create_empty_lines()
@@ -38,14 +39,14 @@ local function setup_virt_text()
 	-- third column
 	local boxes_text = { "", "           ", "           " }
 	for i, value in ipairs(boxes_text) do
-		boxes[i] = ext(i - 1, 0, value)
+		boxes_extmarks[i] = ext(i - 1, 0, value, nil, "right_align")
 	end
 
 	-- second column
 	local color_values_text = { "   0", "   0", "   0" }
 
 	for i, value in ipairs(color_values_text) do
-		color_values[i] = ext(i - 1, 0, value)
+		color_value_extmarks[i] = ext(i - 1, 0, value)
 	end
 
 	--- last row
@@ -57,15 +58,56 @@ local function delete_ext(id)
 	api.nvim_buf_del_extmark(buf, ns, id)
 end
 
----set default mappings for popup window
-local function set_mappings()
+local function string_fix_right(str, width)
+	if type(str) == "number" then
+		str = tostring(str)
+	end
+
+	local number_of_spaces = width - #str
+
+	return string.rep(" ", number_of_spaces) .. str
+end
+
+local function decrease_color_value(increment)
+	local curpos = api.nvim_win_get_cursor(0)[1]
+	local colorValue = color_values[curpos]
+
+	increment = increment or 1
+
+	if colorValue - increment >= 0 then
+		delete_ext(color_value_extmarks[curpos])
+
+		local new_value = colorValue - increment
+		color_value_extmarks[curpos] = ext(curpos - 1, 0, string_fix_right(new_value, 4))
+		color_values[curpos] = new_value
+	end
+end
+
+local function increase_color_value(increment)
+	local curpos = api.nvim_win_get_cursor(0)[1]
+	local colorValue = color_values[curpos]
+
+	increment = increment or 1
+
+	if colorValue + increment <= 255 then
+		delete_ext(color_value_extmarks[curpos])
+
+		local new_value = colorValue + increment
+		color_value_extmarks[curpos] = ext(curpos - 1, 0, string_fix_right(new_value, 4))
+		color_values[curpos] = new_value
+	end
+end
+
+local function set_mappings() ---set default mappings for popup window
 	local mappings = {
 		["q"] = ":q<cr>",
 		["<Esc>"] = ":q<cr>",
 		["h"] = function()
-			delete_ext(boxes[1])
+			decrease_color_value(5)
 		end,
-		["l"] = ":q<cr>",
+		["l"] = function()
+			increase_color_value(5)
+		end,
 	}
 
 	for key, mapping in pairs(mappings) do

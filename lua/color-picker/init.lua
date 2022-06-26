@@ -58,7 +58,7 @@ local function sandwich()
 	end
 end
 
-vim.keymap.set("n", "<C-A-J>", function()
+vim.keymap.set("n", "<C-A-H>", function()
 	utils_window.pop()
 end, { noremap = true, silent = true })
 vim.keymap.set("n", "<C-A-K>", function()
