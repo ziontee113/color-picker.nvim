@@ -8,33 +8,17 @@ local ns = api.nvim_create_namespace("color-picker-popup")
 local color_values = {}
 local boxes = {}
 
-local function delete_ext(id)
-	api.nvim_buf_del_extmark(buf, ns, id)
-end
-
-local function set_mappings()
-	local mappings = {
-		["q"] = ":q<cr>",
-		["<Esc>"] = ":q<cr>",
-		["h"] = function()
-			delete_ext(boxes[1])
-		end,
-		["l"] = ":q<cr>",
-	}
-
-	for key, mapping in pairs(mappings) do
-		vim.keymap.set("n", key, mapping, { buffer = buf, silent = true })
-	end
-end
-
+---helper function to center string in a window
 local function center_my_text(str, width)
 	return string.rep(" ", math.floor(width - #str) / 2) .. str
 end
 
+---helper function to align right string in a window
 local function align_right_text(str, width)
 	return string.rep(" ", width - #str) .. str
 end
 
+---create empty lines in the popup so we can set extmarks
 local function create_empty_lines()
 	api.nvim_buf_set_lines(buf, 0, -1, false, {
 		"",
@@ -76,6 +60,26 @@ local function create_virt_text()
 
 	--- last row
 	ext(3, 0, "rgb(0, 0, 0)", nil, "right_align")
+end
+
+local function delete_ext(id)
+	api.nvim_buf_del_extmark(buf, ns, id)
+end
+
+---set default mappings for popup window
+local function set_mappings()
+	local mappings = {
+		["q"] = ":q<cr>",
+		["<Esc>"] = ":q<cr>",
+		["h"] = function()
+			delete_ext(boxes[1])
+		end,
+		["l"] = ":q<cr>",
+	}
+
+	for key, mapping in pairs(mappings) do
+		vim.keymap.set("n", key, mapping, { buffer = buf, silent = true })
+	end
 end
 
 M.pop = function()
