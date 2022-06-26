@@ -170,7 +170,7 @@ local function update_boxes(line) --{{{
 	local box_string = ""
 
 	if arithmetic ~= 0 then
-		box_string = ""
+		box_string = ""
 	else
 		box_string = " "
 	end
