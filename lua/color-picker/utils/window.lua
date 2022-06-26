@@ -4,10 +4,12 @@ local api = vim.api
 local win = nil
 local buf = nil
 
-local function set_mappings(buf)
+local function set_mappings()
 	local mappings = {
 		["q"] = ":q<cr>",
 		["<Esc>"] = ":q<cr>",
+		["h"] = ":q<cr>",
+		["l"] = ":q<cr>",
 	}
 
 	for key, mapping in pairs(mappings) do
@@ -19,13 +21,17 @@ local function center_my_text(str, width)
 	return string.rep(" ", math.floor(width - #str) / 2) .. str
 end
 
-local function create_lines(buf)
+local function create_lines()
 	api.nvim_buf_set_lines(buf, 0, -1, false, {
 		"R",
 		"G",
 		"B",
 		center_my_text("rgb(0,0,0)", 20),
 	})
+end
+
+local function create_virt_text()
+	-- nvim buf set extmark
 end
 
 M.pop = function()
@@ -42,8 +48,9 @@ M.pop = function()
 		border = "rounded",
 	})
 
-	set_mappings(buf)
-	create_lines(buf)
+	set_mappings()
+	create_lines()
+	create_virt_text()
 
 	vim.api.nvim_buf_set_option(buf, "modifiable", false)
 end
