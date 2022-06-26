@@ -68,12 +68,8 @@ end, { noremap = true, silent = true })
 
 -- for quickly reload file
 vim.keymap.set("n", "<A-r>", function()
-	vim.cmd([[luafile ~/.config/nvim-custom-plugin/color-picker/lua/init.lua]])
-	R("utils.window")
-	vim.cmd([[luafile ~/.config/nvim-custom-plugin/color-picker/lua/utils/window.lua]])
-	print("reloaded")
+	R("color-picker")
+	P("color-picker reloaded")
 end, { noremap = true, silent = false })
-
-print("hello venus")
 
 return M
