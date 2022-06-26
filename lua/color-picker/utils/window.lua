@@ -9,7 +9,11 @@ local function rgbToHex(r, g, b) --{{{
 	return string.format("#%02x%02x%02x", r, g, b)
 end --}}}
 
-local function hslToRgb(h, s, l) --{{{
+local function round(num, numDecimalPlaces) --{{{
+	return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
+end --}}}
+
+local function HSLtoRGB(h, s, l) --{{{
 	h = h / 360
 	s = s / 100
 	l = l / 100
@@ -37,11 +41,7 @@ local function hslToRgb(h, s, l) --{{{
 	end
 	local q = l < 0.5 and l * (1 + s) or l + s - l * s
 	local p = 2 * l - q
-	return to(p, q, h + 0.33334), to(p, q, h), to(p, q, h - 0.33334)
-end --}}}
-
-local function round(num, numDecimalPlaces) --{{{
-	return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
+	return { round(to(p, q, h + 0.33334) * 255), round(to(p, q, h) * 255), round(to(p, q, h - 0.33334) * 255) }
 end --}}}
 
 local function RGBToHSL(r, g, b) --{{{
@@ -316,4 +316,7 @@ M.pop = function() --{{{
 	vim.api.nvim_buf_set_option(buf, "modifiable", false)
 end --}}}
 
+vim.keymap.set("n", "<C-A-L>", function()
+	P(HSLtoRGB(30, 25, 5))
+end, { noremap = true, silent = true })
 return M
