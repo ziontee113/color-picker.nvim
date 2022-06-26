@@ -228,14 +228,28 @@ local function change_color_value(increment, modify) --{{{
 		increment = -increment or -1
 	end
 
-	if color_mode == "rgb" and (colorValue + increment <= 255) then
-		update_number(curline, increment)
-	elseif color_mode == "hsl" then
-		if curline == 1 and (colorValue + increment <= 360) then
-			update_number(curline, increment)
-		elseif colorValue + increment <= 100 then
-			update_number(curline, increment)
+	local pass = false
+
+	if modify == "increase" then
+		if color_mode == "rgb" and (colorValue + increment <= 255) then
+			pass = true
+		elseif color_mode == "hsl" then
+			if curline == 1 and (colorValue + increment <= 360) then
+				pass = true
+			elseif colorValue + increment <= 100 then
+				pass = true
+			end
 		end
+	else
+		if color_mode == "rgb" and (colorValue + increment >= 0) then
+			pass = true
+		elseif color_mode == "hsl" and (colorValue + increment >= 0) then
+			pass = true
+		end
+	end
+
+	if pass then
+		update_number(curline, increment)
 	end
 end --}}}
 
