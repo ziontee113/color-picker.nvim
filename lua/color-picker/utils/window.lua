@@ -22,6 +22,11 @@ local color_value_extmarks = {}
 local color_values = { 0, 0, 0 }
 local boxes_extmarks = {}
 local output_extmark = {}
+local output = nil
+
+local target_buf = nil
+local target_line = nil
+local target_pos = nil
 
 local function create_empty_lines() ---create empty lines in the popup so we can set extmarks{{{
 	api.nvim_buf_set_lines(buf, 0, -1, false, {
@@ -127,7 +132,6 @@ local function update_output() --{{{
 	local arg2 = tostring(color_values[2])
 	local arg3 = tostring(color_values[3])
 
-	local output = ""
 	if output_type == "rgb" then
 		output = "rgb(" .. arg1 .. "," .. arg2 .. "," .. arg3 .. ")"
 	elseif output_type == "hex" then
@@ -243,7 +247,59 @@ local function setup_virt_text() ---create initial virtual text{{{
 	output_extmark = ext(3, 0, "rgb(0,0,0)", nil, "right_align")
 end --}}}
 
-local function apply_color() end
+-------------------------------------
+local function detect_colors(str) --{{{
+	local hex_pattern = "#%x%x%x%x%x%x"
+	local rgb_pattern = "rgb%(%s*%d+%s*,%s*%d+%s*,%s*%d+%s*%)"
+	local hsl_pattern = "hsl%(%s*%d+%s*,%s*%d+%s*,%s*%d+%s*%)"
+
+	local results = {}
+	local patterns = { hex_pattern, rgb_pattern, hsl_pattern }
+
+	for _, pattern in ipairs(patterns) do
+		local start_index = 1
+		while true do
+			local _start, _end = string.find(str, pattern, start_index)
+			local _match = string.match(str, pattern, start_index)
+
+			if _start == nil then
+				break
+			end
+
+			table.insert(results, { _start, _end, _match })
+			start_index = _end + 1
+		end
+	end
+
+	return results
+end --}}}
+
+local function sandwich(cur_buf, cur_line, cur_pos, replace_text) --{{{
+	N(cur_line)
+	-- get cur_line, cur_pos
+	local cur_pos_row = cur_pos[1]
+	local cur_pos_col = cur_pos[2]
+
+	-- get colorRanges
+	local colorRanges = detect_colors(cur_line)
+
+	-- loop through colorRanges, find if any sandwiches the cursor
+	for _, color in ipairs(colorRanges) do
+		local start_pos = color[1] - 1
+		local end_pos = color[2]
+
+		if start_pos <= cur_pos_col and end_pos >= cur_pos_col then
+			-- api.nvim_buf_set_text(0, cur_pos_row - 1, start_pos, cur_pos_row - 1, end_pos, { color[3] })
+			api.nvim_buf_set_text(cur_buf, cur_pos_row - 1, start_pos, cur_pos_row - 1, end_pos, { replace_text })
+		end
+	end
+end --}}}
+
+-------------------------------------
+local function apply_color()
+	sandwich(target_buf, target_line, target_pos, output)
+	api.nvim_win_hide(win)
+end
 
 local function set_mappings() ---set default mappings for popup window{{{
 	local mappings = {
@@ -272,6 +328,10 @@ local function set_mappings() ---set default mappings for popup window{{{
 end --}}}
 
 M.pop = function() --{{{
+	target_buf = api.nvim_get_current_buf()
+	target_line = api.nvim_get_current_line()
+	target_pos = api.nvim_win_get_cursor(0)
+
 	buf = vim.api.nvim_create_buf(false, true)
 	vim.api.nvim_buf_set_option(buf, "filetype", "color-picker")
 
