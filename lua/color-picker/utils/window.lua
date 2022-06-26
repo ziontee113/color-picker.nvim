@@ -111,7 +111,12 @@ local function update_output() --{{{
 	local arg2 = tostring(color_values[2])
 	local arg3 = tostring(color_values[3])
 
-	local output = "rgb(" .. arg1 .. "," .. arg2 .. "," .. arg3 .. ")"
+	local output = ""
+	if output_type == "rgb" then
+		output = "rgb(" .. arg1 .. "," .. arg2 .. "," .. arg3 .. ")"
+	elseif output_type == "hex" then
+		output = rgbToHex(arg1, arg2, arg3)
+	end
 
 	local fg_color = get_fg_color()
 
@@ -122,15 +127,10 @@ end --}}}
 local function change_output_type() --{{{
 	if output_type == "rgb" then
 		output_type = "hex"
-
-		local output = rgbToHex(color_values[1], color_values[2], color_values[3])
-
-		local fg_color = get_fg_color()
-
-		delete_ext(output_extmark)
-		vim.cmd(":highlight ColorPickerOutput guifg=" .. fg_color .. " guibg=" .. output)
-		output_extmark = ext(3, 0, output, "ColorPickerOutput", "right_align")
+	elseif output_type == "hex" then
+		output_type = "rgb"
 	end
+	update_output()
 end --}}}
 
 local function decrease_color_value(increment) --{{{
