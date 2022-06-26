@@ -5,8 +5,13 @@ local win = nil
 local buf = nil
 local ns = api.nvim_create_namespace("color-picker-popup")
 
+local function rgbToHex(r, g, b)
+	return string.format("#%02x%02x%02x", r, g, b)
+end
+
 vim.cmd(":highlight ColorPickerOutput guifg=#c3ccdc")
 
+local output_type = "rgb"
 local color_value_extmarks = {}
 local color_values = { 0, 0, 0 }
 local boxes_extmarks = {}
@@ -94,10 +99,6 @@ local function update_boxes(line)
 	boxes_extmarks[line] = ext(line - 1, 0, box_string, nil, "right_align")
 end
 
-local function rgbToHex(r, g, b)
-	return string.format("#%02x%02x%02x", r, g, b)
-end
-
 local function update_output()
 	delete_ext(output_extmark)
 
@@ -152,6 +153,23 @@ local function increase_color_value(increment)
 	end
 end
 
+local function change_output_type()
+	if output_type == "rgb" then
+		output_type = "hex"
+
+		local output = rgbToHex(color_values[1], color_values[2], color_values[3])
+
+		local fg_color = "white"
+		if (color_values[1] + color_values[2] + color_values[3]) > 300 then
+			fg_color = "black"
+		end
+
+		delete_ext(output_extmark)
+		vim.cmd(":highlight ColorPickerOutput guifg=" .. fg_color .. " guibg=" .. output)
+		output_extmark = ext(3, 0, output, "ColorPickerOutput", "right_align")
+	end
+end
+
 local function set_mappings() ---set default mappings for popup window
 	local mappings = {
 		["q"] = ":q<cr>",
@@ -161,6 +179,9 @@ local function set_mappings() ---set default mappings for popup window
 		end,
 		["l"] = function()
 			increase_color_value(5)
+		end,
+		["o"] = function()
+			change_output_type()
 		end,
 	}
 
