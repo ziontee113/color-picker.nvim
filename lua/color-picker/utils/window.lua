@@ -68,33 +68,39 @@ local function string_fix_right(str, width)
 	return string.rep(" ", number_of_spaces) .. str
 end
 
+local function update_boxes(line) end
+
 local function decrease_color_value(increment)
-	local curpos = api.nvim_win_get_cursor(0)[1]
-	local colorValue = color_values[curpos]
+	local curline = api.nvim_win_get_cursor(0)[1]
+	local colorValue = color_values[curline]
 
 	increment = increment or 1
 
 	if colorValue - increment >= 0 then
-		delete_ext(color_value_extmarks[curpos])
+		delete_ext(color_value_extmarks[curline])
 
 		local new_value = colorValue - increment
-		color_value_extmarks[curpos] = ext(curpos - 1, 0, string_fix_right(new_value, 4))
-		color_values[curpos] = new_value
+		color_value_extmarks[curline] = ext(curline - 1, 0, string_fix_right(new_value, 4))
+		color_values[curline] = new_value
+
+		update_boxes(curline)
 	end
 end
 
 local function increase_color_value(increment)
-	local curpos = api.nvim_win_get_cursor(0)[1]
-	local colorValue = color_values[curpos]
+	local curline = api.nvim_win_get_cursor(0)[1]
+	local colorValue = color_values[curline]
 
 	increment = increment or 1
 
 	if colorValue + increment <= 255 then
-		delete_ext(color_value_extmarks[curpos])
+		delete_ext(color_value_extmarks[curline])
 
 		local new_value = colorValue + increment
-		color_value_extmarks[curpos] = ext(curpos - 1, 0, string_fix_right(new_value, 4))
-		color_values[curpos] = new_value
+		color_value_extmarks[curline] = ext(curline - 1, 0, string_fix_right(new_value, 4))
+		color_values[curline] = new_value
+
+		update_boxes(curline)
 	end
 end
 
