@@ -5,6 +5,8 @@ local win = nil
 local buf = nil
 local ns = api.nvim_create_namespace("color-picker-popup")
 
+vim.cmd(":highlight ColorPickerOutput guifg=#c3ccdc")
+
 local color_value_extmarks = {}
 local color_values = { 0, 0, 0 }
 local boxes_extmarks = {}
@@ -51,7 +53,7 @@ local function setup_virt_text()
 	end
 
 	--- last row
-	output_extmark = ext(3, 0, "rgb(0, 0, 0)", nil, "right_align")
+	output_extmark = ext(3, 0, "rgb(0,0,0)", nil, "right_align")
 end
 
 ---shortcut for delete extmarks given an id
@@ -92,6 +94,10 @@ local function update_boxes(line)
 	boxes_extmarks[line] = ext(line - 1, 0, box_string, nil, "right_align")
 end
 
+local function rgbToHex(r, g, b)
+	return string.format("#%02x%02x%02x", r, g, b)
+end
+
 local function update_output()
 	delete_ext(output_extmark)
 
@@ -100,7 +106,14 @@ local function update_output()
 	local arg3 = tostring(color_values[3])
 
 	local output = "rgb(" .. arg1 .. "," .. arg2 .. "," .. arg3 .. ")"
-	output_extmark = ext(3, 0, output, nil, "right_align")
+
+	local fg_color = "white"
+	if (arg1 + arg2 + arg3) > 300 then
+		fg_color = "black"
+	end
+
+	vim.cmd(":highlight ColorPickerOutput guifg=" .. fg_color .. " guibg=" .. rgbToHex(arg1, arg2, arg3))
+	output_extmark = ext(3, 0, output, "ColorPickerOutput", "right_align")
 end
 
 local function decrease_color_value(increment)
@@ -169,6 +182,9 @@ M.pop = function()
 		height = 4,
 		border = "rounded",
 	})
+
+	-- reset color values
+	color_values = { 0, 0, 0 }
 
 	set_mappings()
 	create_empty_lines()
