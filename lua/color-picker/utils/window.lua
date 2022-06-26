@@ -8,16 +8,6 @@ local ns = api.nvim_create_namespace("color-picker-popup")
 local color_values = {}
 local boxes = {}
 
----helper function to center string in a window
-local function center_my_text(str, width)
-	return string.rep(" ", math.floor(width - #str) / 2) .. str
-end
-
----helper function to align right string in a window
-local function align_right_text(str, width)
-	return string.rep(" ", width - #str) .. str
-end
-
 ---create empty lines in the popup so we can set extmarks
 local function create_empty_lines()
 	api.nvim_buf_set_lines(buf, 0, -1, false, {
@@ -28,7 +18,7 @@ local function create_empty_lines()
 	})
 end
 
----a shortcut to create extmarks
+---shortcut to create extmarks
 local function ext(row, col, text, hl_group, virt_text_pos)
 	return api.nvim_buf_set_extmark(buf, ns, row, col, {
 		virt_text = { { text, hl_group or "Normal" } },
@@ -36,8 +26,8 @@ local function ext(row, col, text, hl_group, virt_text_pos)
 	})
 end
 
----call this function to create initial virtual text
-local function create_virt_text()
+---create initial virtual text
+local function setup_virt_text()
 	-- first column
 	local rgb = { "R", "G", "B" }
 
@@ -62,6 +52,7 @@ local function create_virt_text()
 	ext(3, 0, "rgb(0, 0, 0)", nil, "right_align")
 end
 
+---shortcut for delete extmarks given an id
 local function delete_ext(id)
 	api.nvim_buf_del_extmark(buf, ns, id)
 end
@@ -98,7 +89,7 @@ M.pop = function()
 
 	set_mappings()
 	create_empty_lines()
-	create_virt_text()
+	setup_virt_text()
 
 	vim.api.nvim_buf_set_option(buf, "modifiable", false)
 end
