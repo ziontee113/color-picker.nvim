@@ -305,8 +305,12 @@ local function action_color_percent(percent, line) --{{{
 end --}}}
 
 local function action_color_value(increment, modify) --{{{
-	for _, line in ipairs(action_group) do
-		change_color_value(increment, modify, line)
+	if #action_group > 0 then
+		for _, line in ipairs(action_group) do
+			change_color_value(increment, modify, line)
+		end
+	else
+		change_color_value(increment, modify)
 	end
 end --}}}
 
@@ -497,6 +501,15 @@ local function set_mappings() ---set default mappings for popup window{{{
 		end,
 		["<Leader>3"] = function()
 			set_action_group({ 1, 2, 3 })
+		end,
+		["<Leader>0"] = function()
+			set_action_group({})
+		end,
+		["<C-c>"] = function()
+			set_action_group({})
+		end,
+		["x"] = function()
+			set_action_group({})
 		end,
 
 		["q"] = ":q<cr>",
