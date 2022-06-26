@@ -30,7 +30,7 @@ local utils_window = require("color-picker.utils.window")
 -- 	return results
 -- end --}}}
 
--- color: #121221, #122233
+-- color: hsl(240,100%,37%), #122233
 -- color: #f4f4f4
 -- color: rgb(0,0,0)
 -- color: rgb( 0, 0, 0)
@@ -59,7 +59,7 @@ local utils_window = require("color-picker.utils.window")
 -- 	end
 -- end --}}}
 
-vim.keymap.set("n", "<C-A-H>", function()
+vim.keymap.set("n", "<C-c>", function()
 	utils_window.pop()
 end, { noremap = true, silent = true })
 vim.keymap.set("n", "<C-A-K>", function()

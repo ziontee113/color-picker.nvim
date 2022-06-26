@@ -91,16 +91,15 @@ local function update_boxes(line) --{{{
 		end
 	end
 
-	local box_string = ""
+	local box_string = " "
 
 	if arithmetic ~= 0 then
 		box_string = ""
-	else
-		box_string = " "
 	end
 
 	for _ = 1, floor, 1 do
-		box_string = "ﱢ" .. box_string
+		-- box_string = "ﱢ" .. box_string
+		box_string = "ﮊ" .. box_string
 	end
 
 	for _ = 1, 10 - floor do
@@ -251,7 +250,7 @@ end --}}}
 local function detect_colors(str) --{{{
 	local hex_pattern = "#%x%x%x%x%x%x"
 	local rgb_pattern = "rgb%(%s*%d+%s*,%s*%d+%s*,%s*%d+%s*%)"
-	local hsl_pattern = "hsl%(%s*%d+%s*,%s*%d+%s*,%s*%d+%s*%)"
+	local hsl_pattern = "hsl%(%s*%d+%s*%%*,%s*%d+%s*%%*,%s*%d+%s*%%*%)"
 
 	local results = {}
 	local patterns = { hex_pattern, rgb_pattern, hsl_pattern }
@@ -274,8 +273,26 @@ local function detect_colors(str) --{{{
 	return results
 end --}}}
 
+local function sandwich_detector(cur_buf, cur_line, cur_pos, replace_text) --{{{
+	-- get cur_line, cur_pos
+	local cur_pos_row = cur_pos[1]
+	local cur_pos_col = cur_pos[2]
+
+	-- get colorRanges
+	local colorRanges = detect_colors(cur_line)
+
+	-- loop through colorRanges, find if any sandwiches the cursor
+	for _, color in ipairs(colorRanges) do
+		local start_pos = color[1] - 1
+		local end_pos = color[2]
+
+		if start_pos <= cur_pos_col and end_pos >= cur_pos_col then
+			return color[3]
+		end
+	end
+end --}}}
+
 local function sandwich(cur_buf, cur_line, cur_pos, replace_text) --{{{
-	N(cur_line)
 	-- get cur_line, cur_pos
 	local cur_pos_row = cur_pos[1]
 	local cur_pos_col = cur_pos[2]
@@ -295,11 +312,33 @@ local function sandwich(cur_buf, cur_line, cur_pos, replace_text) --{{{
 	end
 end --}}}
 
+local function sandwich_processor(str)
+	local hex_capture_pattern = "#(%x%x%x%x%x%x)"
+	local rgb_capture_pattern = "rgb%(%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*%)"
+	local hsl_capture_pattern = "hsl%(%s*(%d+)%s*,%s*(%d+)%s*%%*,%s*(%d+)%s*%%*%)"
+
+	-- color: #121212
+	-- color: #1a1a1a
+	-- color: rgb( 0, 4, 14)
+	-- color: hsl( 222, 12%, 88%)
+	local _, _, r, g, b = string.find(str, rgb_capture_pattern)
+	local _, _, hex = string.find(str, hex_capture_pattern)
+	local _, _, h, s, l = string.find(str, hsl_capture_pattern)
+
+	if hex then
+		return hex
+	elseif r then
+		return { tonumber(r), tonumber(g), tonumber(b) }
+	elseif h then
+		return { tonumber(h), tonumber(s), tonumber(l) }
+	end
+end
+
 -------------------------------------
-local function apply_color()
+local function apply_color() --{{{
 	sandwich(target_buf, target_line, target_pos, output)
 	api.nvim_win_hide(win)
-end
+end --}}}
 
 local function set_mappings() ---set default mappings for popup window{{{
 	local mappings = {
@@ -344,6 +383,12 @@ M.pop = function() --{{{
 		height = 4,
 		border = "rounded",
 	})
+
+	-- detect cursor colors
+	local detected_sandwich = sandwich_detector(target_buf, target_line, target_pos)
+	if detected_sandwich then
+		P(sandwich_processor(detected_sandwich))
+	end
 
 	-- reset color values
 	color_values = { 0, 0, 0 }
