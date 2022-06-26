@@ -13,14 +13,15 @@ local function round(num, numDecimalPlaces) --{{{
 	return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
 end --}}}
 
-local function HSLtoRGB(h, s, l) --{{{
+local function HSLToRGB(h, s, l) --{{{
 	h = h / 360
 	s = s / 100
 	l = l / 100
 
 	if s == 0 then
-		return l, l, l
+		return { l, l, l }
 	end
+
 	local function to(p, q, t)
 		if t < 0 then
 			t = t + 1
@@ -39,8 +40,10 @@ local function HSLtoRGB(h, s, l) --{{{
 		end
 		return p
 	end
+
 	local q = l < 0.5 and l * (1 + s) or l + s - l * s
 	local p = 2 * l - q
+
 	return { round(to(p, q, h + 0.33334) * 255), round(to(p, q, h) * 255), round(to(p, q, h - 0.33334) * 255) }
 end --}}}
 
@@ -86,10 +89,10 @@ local function RGBToHSL(r, g, b) --{{{
 		h = round(h / 6 * 360)
 	end
 
-	return "hsl(" .. h .. "," .. round(s * 100, 1) .. "%," .. round(l * 100, 1) .. "%)"
+	return { h, round(s * 100, 0), round(l * 100, 0) }
 end --}}}
 
-vim.cmd(":highlight ColorPickerOutput guifg=#c3ccdc")
+vim.cmd(":highlight ColorPickerOutput guifg=#white")
 
 local output_type = "rgb"
 local color_mode = "rgb"
@@ -148,8 +151,20 @@ end --}}}
 local function update_boxes(line) --{{{
 	delete_ext(boxes_extmarks[line])
 
-	local floor = math.floor(color_values[line] / 25.5)
-	local arithmetic = color_values[line] / 25.5 - floor
+	local floor = nil
+	local arithmetic = nil
+	if color_mode == "rgb" then
+		floor = math.floor(color_values[line] / 25.5)
+		arithmetic = color_values[line] / 25.5 - floor
+	else
+		if line == 1 then
+			floor = math.floor(color_values[line] / 36)
+			arithmetic = color_values[line] / 36 - floor
+		else
+			floor = math.floor(color_values[line] / 10)
+			arithmetic = color_values[line] / 10 - floor
+		end
+	end
 
 	local box_string = ""
 
@@ -189,6 +204,8 @@ local function update_output() --{{{
 		output = "rgb(" .. arg1 .. "," .. arg2 .. "," .. arg3 .. ")"
 	elseif output_type == "hex" then
 		output = rgbToHex(arg1, arg2, arg3)
+	elseif output_type == "hsl" then
+		output = "hsl(" .. arg1 .. "," .. arg2 .. "%," .. arg3 .. "%)"
 	end
 
 	local fg_color = get_fg_color()
@@ -199,6 +216,8 @@ end --}}}
 
 local function change_output_type() --{{{
 	if output_type == "rgb" then
+		output_type = "hsl"
+	elseif output_type == "hsl" then
 		output_type = "hex"
 	elseif output_type == "hex" then
 		output_type = "rgb"
@@ -253,15 +272,20 @@ local function change_color_value(increment, modify) --{{{
 	end
 end --}}}
 
-local function change_color_mode()
+local function change_color_mode() --{{{
 	if color_mode == "rgb" then
 		color_mode = "hsl"
+		output_type = "hsl"
+		color_values = RGBToHSL(color_values[1], color_values[2], color_values[3])
 	else
 		color_mode = "rgb"
+		output_type = "rgb"
+		color_values = HSLToRGB(color_values[1], color_values[2], color_values[3])
 	end
 
 	set_color_marks(color_mode)
-end
+	change_color_value(0)
+end --}}}
 
 local function setup_virt_text() ---create initial virtual text{{{
 	-- first column
