@@ -312,7 +312,7 @@ local function sandwich(cur_buf, cur_line, cur_pos, replace_text) --{{{
 	end
 end --}}}
 
-local function sandwich_processor(str)
+local function sandwich_processor(str) --{{{
 	local hex_capture_pattern = "#(%x%x%x%x%x%x)"
 	local rgb_capture_pattern = "rgb%(%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*%)"
 	local hsl_capture_pattern = "hsl%(%s*(%d+)%s*,%s*(%d+)%s*%%*,%s*(%d+)%s*%%*%)"
@@ -328,7 +328,7 @@ local function sandwich_processor(str)
 	elseif h then
 		return { "hsl", tonumber(h), tonumber(s), tonumber(l) }
 	end
-end
+end --}}}
 
 -------------------------------------
 local function apply_color() --{{{
@@ -383,6 +383,10 @@ M.pop = function() --{{{
 	-- reset color values
 	color_values = { 0, 0, 0 }
 
+	set_mappings()
+	create_empty_lines()
+	setup_virt_text()
+
 	-- detect & try to parse cursor colors
 	local detected_sandwich = sandwich_detector(target_buf, target_line, target_pos)
 	if detected_sandwich then
@@ -395,12 +399,12 @@ M.pop = function() --{{{
 			-- color: #1a1a1a
 			-- color: rgb( 0, 4, 14)
 			-- color: hsl( 222, 12%, 88%)
+			set_color_marks(color_mode)
+			update_number(1, 0)
+			update_number(2, 0)
+			update_number(3, 0)
 		end
 	end
-
-	set_mappings()
-	create_empty_lines()
-	setup_virt_text()
 
 	vim.api.nvim_buf_set_option(buf, "modifiable", false)
 end --}}}
