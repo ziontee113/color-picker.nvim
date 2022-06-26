@@ -2,9 +2,13 @@ local M = {}
 local api = vim.api
 local utils = require("color-picker.utils")
 
+-------------------------------------
+
 local win = nil
 local buf = nil
 local ns = api.nvim_create_namespace("color-picker-popup")
+
+-------------------------------------
 
 local rgbToHex = utils.rgbToHex
 local round = utils.round
@@ -12,6 +16,8 @@ local HSLToRGB = utils.HSLToRGB
 local RGBToHSL = utils.RGBToHSL
 local hslToHex = utils.hslToHex
 local HexToRGB = utils.HexToRGB
+
+-------------------------------------
 
 vim.cmd(":highlight ColorPickerOutput guifg=#white")
 vim.cmd(":highlight ColorPickerActionGroup guifg=#00F1F5")
@@ -30,6 +36,8 @@ local action_group = {}
 local target_buf = nil
 local target_line = nil
 local target_pos = nil
+
+-------------------------------------
 
 local function create_empty_lines() ---create empty lines in the popup so we can set extmarks{{{
 	api.nvim_buf_set_lines(buf, 0, -1, false, {
@@ -286,7 +294,7 @@ end --}}}
 
 -------------------------------------
 
-local function action_color_percent(percent, line)
+local function action_color_percent(percent, line) --{{{
 	if #action_group > 0 then
 		for _, cur_line in ipairs(action_group) do
 			set_color_line_percent(percent, cur_line)
@@ -294,13 +302,13 @@ local function action_color_percent(percent, line)
 	else
 		set_color_line_percent(percent, line)
 	end
-end
+end --}}}
 
-local function action_color_value(increment, modify)
+local function action_color_value(increment, modify) --{{{
 	for _, line in ipairs(action_group) do
 		change_color_value(increment, modify, line)
 	end
-end
+end --}}}
 
 local function set_action_group(group) --{{{
 	action_group = group
