@@ -111,7 +111,7 @@ end --}}}
 
 local function delete_ext(id) -- shortcut for delete extmarks given an id{{{
 	api.nvim_buf_del_extmark(buf, ns, id)
-end
+end --}}}
 
 local function ext(row, col, text, hl_group, virt_text_pos) ---shortcut to create extmarks{{{
 	return api.nvim_buf_set_extmark(buf, ns, row, col, {
@@ -120,7 +120,7 @@ local function ext(row, col, text, hl_group, virt_text_pos) ---shortcut to creat
 	})
 end --}}}
 
-local function set_color_marks(marks)
+local function set_color_marks(marks) --{{{
 	local t = {}
 	marks:gsub(".", function(c)
 		table.insert(t, c)
@@ -133,30 +133,9 @@ local function set_color_marks(marks)
 	for i, value in ipairs(t) do
 		color_mode_extmarks[i] = ext(i - 1, 0, string.upper(value), nil, "overlay")
 	end
-end
-
-local function setup_virt_text() ---create initial virtual text{{{
-	-- first column
-	set_color_marks(color_mode)
-
-	-- third column
-	local boxes_text = { "", "", "" }
-	for i, value in ipairs(boxes_text) do
-		boxes_extmarks[i] = ext(i - 1, 0, value, nil, "right_align")
-	end
-
-	-- second column
-	local color_values_text = { "   0", "   0", "   0" }
-
-	for i, value in ipairs(color_values_text) do
-		color_value_extmarks[i] = ext(i - 1, 0, value)
-	end
-
-	--- last row
-	output_extmark = ext(3, 0, "rgb(0,0,0)", nil, "right_align")
 end --}}}
 
-local function string_fix_right(str, width)
+local function string_fix_right(str, width) --{{{
 	if type(str) == "number" then
 		str = tostring(str)
 	end
@@ -227,39 +206,36 @@ local function change_output_type() --{{{
 	update_output()
 end --}}}
 
-local function decrease_color_value(increment) --{{{
-	local curline = api.nvim_win_get_cursor(0)[1]
+local function update_number(curline, increment) --{{{
 	local colorValue = color_values[curline]
+	delete_ext(color_value_extmarks[curline])
 
-	increment = increment or 1
+	local new_value = colorValue + increment
+	color_value_extmarks[curline] = ext(curline - 1, 0, string_fix_right(new_value, 4))
+	color_values[curline] = new_value
 
-	if colorValue - increment >= 0 then
-		delete_ext(color_value_extmarks[curline])
-
-		local new_value = colorValue - increment
-		color_value_extmarks[curline] = ext(curline - 1, 0, string_fix_right(new_value, 4))
-		color_values[curline] = new_value
-
-		update_boxes(curline)
-		update_output()
-	end
+	update_boxes(curline)
+	update_output()
 end --}}}
 
-local function increase_color_value(increment) --{{{
+local function change_color_value(increment, modify) --{{{
 	local curline = api.nvim_win_get_cursor(0)[1]
 	local colorValue = color_values[curline]
 
-	increment = increment or 1
+	if modify == "increase" then
+		increment = increment or 1
+	else
+		increment = -increment or -1
+	end
 
-	if colorValue + increment <= 255 then
-		delete_ext(color_value_extmarks[curline])
-
-		local new_value = colorValue + increment
-		color_value_extmarks[curline] = ext(curline - 1, 0, string_fix_right(new_value, 4))
-		color_values[curline] = new_value
-
-		update_boxes(curline)
-		update_output()
+	if color_mode == "rgb" and (colorValue + increment <= 255) then
+		update_number(curline, increment)
+	elseif color_mode == "hsl" then
+		if curline == 1 and (colorValue + increment <= 360) then
+			update_number(curline, increment)
+		elseif colorValue + increment <= 100 then
+			update_number(curline, increment)
+		end
 	end
 end --}}}
 
@@ -273,15 +249,36 @@ local function change_color_mode()
 	set_color_marks(color_mode)
 end
 
+local function setup_virt_text() ---create initial virtual text{{{
+	-- first column
+	set_color_marks(color_mode)
+
+	-- third column
+	local boxes_text = { "", "", "" }
+	for i, value in ipairs(boxes_text) do
+		boxes_extmarks[i] = ext(i - 1, 0, value, nil, "right_align")
+	end
+
+	-- second column
+	local color_values_text = { "   0", "   0", "   0" }
+
+	for i, value in ipairs(color_values_text) do
+		color_value_extmarks[i] = ext(i - 1, 0, value)
+	end
+
+	--- last row
+	output_extmark = ext(3, 0, "rgb(0,0,0)", nil, "right_align")
+end --}}}
+
 local function set_mappings() ---set default mappings for popup window{{{
 	local mappings = {
 		["q"] = ":q<cr>",
 		["<Esc>"] = ":q<cr>",
 		["h"] = function()
-			decrease_color_value(5)
+			change_color_value(5, "decrease")
 		end,
 		["l"] = function()
-			increase_color_value(5)
+			change_color_value(5, "increase")
 		end,
 		["o"] = function()
 			change_output_type()
