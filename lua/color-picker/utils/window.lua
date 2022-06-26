@@ -68,7 +68,28 @@ local function string_fix_right(str, width)
 	return string.rep(" ", number_of_spaces) .. str
 end
 
-local function update_boxes(line) end
+local function update_boxes(line)
+	delete_ext(boxes_extmarks[line])
+
+	local floor = math.floor(color_values[line] / 25.5)
+	local arithmetic = color_values[line] / 25.5 - floor
+
+	local box_string = ""
+
+	if arithmetic ~= 0 then
+		box_string = ""
+	end
+
+	for i = 1, floor, 1 do
+		box_string = "ﱢ" .. box_string
+	end
+
+	for i = 2, 10 - floor do
+		box_string = box_string .. " "
+	end
+
+	boxes_extmarks[line] = ext(line - 1, 0, box_string, nil, "right_align")
+end
 
 local function decrease_color_value(increment)
 	local curline = api.nvim_win_get_cursor(0)[1]
