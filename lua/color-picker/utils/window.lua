@@ -261,7 +261,7 @@ end
 local function set_color_line_percent(percent, line)
 	local value = 0
 	if color_mode == "rgb" then
-		value = percent / 100 * 255
+		value = round(percent / 100 * 255)
 	end
 
 	local increment = value - color_values[line]
@@ -362,9 +362,58 @@ end --}}}
 
 local function set_mappings() ---set default mappings for popup window{{{
 	local mappings = {
+		["M"] = function()
+			local line = api.nvim_win_get_cursor(0)[1]
+			set_color_line_percent(50, line)
+		end,
+		["H"] = function()
+			local line = api.nvim_win_get_cursor(0)[1]
+			set_color_line_percent(0, line)
+		end,
+		["L"] = function()
+			local line = api.nvim_win_get_cursor(0)[1]
+			set_color_line_percent(100, line)
+		end,
+
 		["0"] = function()
 			local line = api.nvim_win_get_cursor(0)[1]
 			set_color_line_percent(0, line)
+		end,
+		["1"] = function()
+			local line = api.nvim_win_get_cursor(0)[1]
+			set_color_line_percent(10, line)
+		end,
+		["2"] = function()
+			local line = api.nvim_win_get_cursor(0)[1]
+			set_color_line_percent(20, line)
+		end,
+		["3"] = function()
+			local line = api.nvim_win_get_cursor(0)[1]
+			set_color_line_percent(30, line)
+		end,
+		["4"] = function()
+			local line = api.nvim_win_get_cursor(0)[1]
+			set_color_line_percent(40, line)
+		end,
+		["5"] = function()
+			local line = api.nvim_win_get_cursor(0)[1]
+			set_color_line_percent(50, line)
+		end,
+		["6"] = function()
+			local line = api.nvim_win_get_cursor(0)[1]
+			set_color_line_percent(60, line)
+		end,
+		["7"] = function()
+			local line = api.nvim_win_get_cursor(0)[1]
+			set_color_line_percent(70, line)
+		end,
+		["8"] = function()
+			local line = api.nvim_win_get_cursor(0)[1]
+			set_color_line_percent(80, line)
+		end,
+		["9"] = function()
+			local line = api.nvim_win_get_cursor(0)[1]
+			set_color_line_percent(90, line)
 		end,
 		[")"] = function()
 			local line = api.nvim_win_get_cursor(0)[1]
