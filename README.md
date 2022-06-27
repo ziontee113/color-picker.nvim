@@ -33,3 +33,11 @@ require("color-picker").setup({
 
 vim.cmd([[hi FloatBorder guibg=NONE]]) -- if you don't want wierd border background colors around the popup.
 ```
+## Feedback
+If you run into issues or come up with an awesome idea, please feel free to open an issue or PR.
+## License
+The project is licensed under MIT license. See [LICENSE](./LICENSE) file for details.
+
+## My other Neovim plugins:
+- [Syntax Tree Surfer](https://github.com/ziontee113/syntax-tree-surfer)
+- [Icon Picker](https://github.com/ziontee113/icon-picker.nvim)
