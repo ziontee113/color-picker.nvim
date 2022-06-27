@@ -504,17 +504,17 @@ local function set_mappings() ---set default mappings for popup window{{{
 			action_color_percent(100, line)
 		end, --}}}
 
-		["s"] = function() --{{{ wasd hl increment
+		["S"] = function() --{{{ wasd hl increment
 			action_color_value(10, "decrease")
 		end,
-		["w"] = function()
+		["W"] = function()
 			action_color_value(10, "increase")
 		end,
 
-		["a"] = function()
+		["A"] = function()
 			action_color_value(5, "decrease")
 		end,
-		["d"] = function()
+		["D"] = function()
 			action_color_value(5, "increase")
 		end,
 
@@ -585,6 +585,8 @@ M.pop = function(insert_or_normal_mode) --{{{
 
 	buf = vim.api.nvim_create_buf(false, true)
 	vim.api.nvim_buf_set_option(buf, "filetype", "color-picker")
+
+	api.nvim_buf_clear_namespace(buf, ns, 0, -1)
 
 	win = vim.api.nvim_open_win(buf, true, {
 		relative = "cursor",
