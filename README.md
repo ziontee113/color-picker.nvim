@@ -54,7 +54,6 @@ If you run into issues or come up with an awesome idea, please feel free to open
 
 The project is licensed under MIT license. See [LICENSE](./LICENSE) file for details.
 
-## My other Neovim plugins:
+## Credits
 
-- [Syntax Tree Surfer](https://github.com/ziontee113/syntax-tree-surfer)
-- [Icon Picker](https://github.com/ziontee113/icon-picker.nvim)
+@max397574 for creating https://github.com/max397574/colortils.nvim
