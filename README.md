@@ -7,6 +7,8 @@ A powerful plugin that lets Neovim Users choose & modify colors. This plugin sup
 ## Usage:
 You can watch the full demo of the plugin here: [Color Picker for Neovim! - color-picker.nvim Plugin Showcase](https://youtu.be/eWRoxJatH8A)
 
+## Requirements:
+Neovim `0.7` or higher.
 ## Installation:
 For Packer
 ```lua
