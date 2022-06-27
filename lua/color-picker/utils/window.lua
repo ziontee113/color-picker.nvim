@@ -159,7 +159,12 @@ local function update_output() --{{{
 	local arg3 = tostring(color_values[3])
 
 	if output_type == "rgb" then
-		output = "rgb(" .. arg1 .. ", " .. arg2 .. ", " .. arg3 .. ")"
+		if color_mode == "hsl" then
+			local converted_rgb = HSLToRGB(arg1, arg2, arg3)
+			output = "rgb(" .. converted_rgb[1] .. ", " .. converted_rgb[2] .. ", " .. converted_rgb[3] .. ")"
+		else
+			output = "rgb(" .. arg1 .. ", " .. arg2 .. ", " .. arg3 .. ")"
+		end
 	elseif output_type == "hex" then
 		if color_mode == "rgb" then
 			output = rgbToHex(arg1, arg2, arg3)
