@@ -637,11 +637,6 @@ M.pop = function(insert_or_normal_mode) --{{{
 	if detected_sandwich then
 		local new_sandwich = sandwich_processor(detected_sandwich)
 
-		-- color: #b5b5b5
-		-- color: #00004b
-		-- color: rgb( 0, 4, 14)
-		-- color: hsl( 222, 12%, 88%)
-
 		if new_sandwich[1] == "rgb" or new_sandwich[1] == "hsl" then
 			color_mode = new_sandwich[1]
 			color_values = { new_sandwich[2], new_sandwich[3], new_sandwich[4] }
@@ -672,10 +667,10 @@ end --}}}
 
 -------------------------------------
 
-M.setup = function(user_settings)
+M.setup = function(user_settings) --{{{
 	for key, value in pairs(user_settings) do
 		M.user_settings[key] = user_settings[key]
 	end
-end
+end --}}}
 
 return M
