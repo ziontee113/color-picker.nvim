@@ -19,6 +19,12 @@ local HexToRGB = utils.HexToRGB
 
 -------------------------------------
 
+M.user_settings = {
+	["icons"] = { "ﮊ", "" },
+}
+
+-------------------------------------
+
 vim.cmd(":highlight ColorPickerOutput guifg=#white")
 vim.cmd(":highlight ColorPickerActionGroup guifg=#00F1F5")
 
@@ -115,12 +121,12 @@ local function update_boxes(line) --{{{
 	local box_string = " "
 
 	if arithmetic ~= 0 then
-		box_string = ""
+		box_string = M.user_settings.icons[2]
 	end
 
 	for _ = 1, floor, 1 do
 		-- box_string = "ﱢ" .. box_string
-		box_string = "ﮊ" .. box_string
+		box_string = M.user_settings.icons[1] .. box_string
 	end
 
 	for _ = 1, 10 - floor do
@@ -518,6 +524,27 @@ local function set_mappings() ---set default mappings for popup window{{{
 			action_color_value(5, "increase")
 		end,
 
+		["s"] = function()
+			action_color_value(10, "decrease")
+		end,
+		["w"] = function()
+			action_color_value(10, "increase")
+		end,
+
+		["a"] = function()
+			action_color_value(5, "decrease")
+		end,
+		["d"] = function()
+			action_color_value(5, "increase")
+		end,
+
+		["u"] = function()
+			action_color_value(5, "decrease")
+		end,
+		["i"] = function()
+			action_color_value(5, "increase")
+		end,
+
 		["h"] = function()
 			action_color_value(1, "decrease")
 		end,
@@ -642,4 +669,13 @@ M.pop = function(insert_or_normal_mode) --{{{
 
 	vim.api.nvim_buf_set_option(buf, "modifiable", false)
 end --}}}
+
+-------------------------------------
+
+M.setup = function(user_settings)
+	for key, value in pairs(user_settings) do
+		M.user_settings[key] = user_settings[key]
+	end
+end
+
 return M
