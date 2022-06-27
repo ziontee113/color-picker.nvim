@@ -32,6 +32,7 @@ local boxes_extmarks = {}
 local output_extmark = {}
 local output = nil
 local action_group = {}
+local sandwich_mode = false
 
 local target_buf = nil
 local target_line = nil
@@ -415,8 +416,13 @@ end --}}}
 -------------------------------------
 
 local function apply_color() --{{{
-	sandwich(target_buf, target_line, target_pos, output)
 	api.nvim_win_hide(win)
+
+	if sandwich_mode == true then
+		sandwich(target_buf, target_line, target_pos, output)
+	else
+		vim.cmd("normal! i" .. output)
+	end
 end --}}}
 
 local function set_mappings() ---set default mappings for popup window{{{
@@ -578,7 +584,7 @@ M.pop = function() --{{{
 	create_empty_lines()
 	setup_virt_text()
 
-	-- detect & try to parse cursor colors{{{
+	-- detect & try to parse cursor colors {{{
 	local detected_sandwich = sandwich_detector(target_buf, target_line, target_pos)
 	if detected_sandwich then
 		local new_sandwich = sandwich_processor(detected_sandwich)
@@ -601,7 +607,13 @@ M.pop = function() --{{{
 		update_number(1, 0)
 		update_number(2, 0)
 		update_number(3, 0)
-	end --}}}
+
+		sandwich_mode = true
+	else
+		sandwich_mode = false
+	end
+
+	--}}}
 
 	vim.api.nvim_buf_set_option(buf, "modifiable", false)
 end --}}}

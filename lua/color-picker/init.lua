@@ -60,7 +60,10 @@ local utils_window = require("color-picker.utils.window")
 -- end --}}}
 
 vim.keymap.set("n", "<C-c>", function()
-	utils_window.pop()
+	utils_window.pop("normal")
+end, { noremap = true, silent = true })
+vim.keymap.set("i", "<C-c>", function()
+	utils_window.pop("insert")
 end, { noremap = true, silent = true })
 vim.keymap.set("n", "<C-A-K>", function()
 	vim.cmd("messages clear")
