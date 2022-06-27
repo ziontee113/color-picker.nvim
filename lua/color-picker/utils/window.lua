@@ -32,6 +32,7 @@ local boxes_extmarks = {}
 local output_extmark = {}
 local output = nil
 local action_group = {}
+local print_output_mode = nil
 local sandwich_mode = false
 
 local target_buf = nil
@@ -415,13 +416,25 @@ end --}}}
 
 -------------------------------------
 
+local function print_output_no_sandwich()
+	if print_output_mode == "normal" then
+		vim.cmd("normal! i" .. output)
+	else
+		vim.cmd("startinsert")
+		vim.cmd("norm a" .. output)
+
+		local key = vim.api.nvim_replace_termcodes("<Right>", true, true, true)
+		vim.api.nvim_feedkeys(key, "i", false)
+	end
+end
+
 local function apply_color() --{{{
 	api.nvim_win_hide(win)
 
 	if sandwich_mode == true then
 		sandwich(target_buf, target_line, target_pos, output)
 	else
-		vim.cmd("normal! i" .. output)
+		print_output_no_sandwich()
 	end
 end --}}}
 
@@ -559,7 +572,7 @@ local function set_mappings() ---set default mappings for popup window{{{
 	end
 end --}}}
 
-M.pop = function() --{{{
+M.pop = function(insert_or_normal_mode) --{{{
 	target_buf = api.nvim_get_current_buf()
 	target_line = api.nvim_get_current_line()
 	target_pos = api.nvim_win_get_cursor(0)
@@ -613,7 +626,11 @@ M.pop = function() --{{{
 		sandwich_mode = false
 	end
 
-	--}}}
+	if insert_or_normal_mode == "insert" then
+		vim.cmd("stopinsert")
+	end
+
+	print_output_mode = insert_or_normal_mode --}}}
 
 	vim.api.nvim_buf_set_option(buf, "modifiable", false)
 end --}}}
