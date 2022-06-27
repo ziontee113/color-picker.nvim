@@ -302,7 +302,13 @@ local function action_color_percent(percent, line) --{{{
 			set_color_line_percent(percent, cur_line)
 		end
 	else
-		set_color_line_percent(percent, line)
+		if line > 3 then
+			set_color_line_percent(percent, 1)
+			set_color_line_percent(percent, 2)
+			set_color_line_percent(percent, 3)
+		else
+			set_color_line_percent(percent, line)
+		end
 	end
 end --}}}
 
@@ -416,9 +422,9 @@ end --}}}
 
 -------------------------------------
 
-local function print_output_no_sandwich()
+local function print_output_no_sandwich() --{{{
 	if print_output_mode == "normal" then
-		vim.cmd("normal! i" .. output)
+		vim.cmd("normal! a" .. output)
 	else
 		vim.cmd("startinsert")
 		vim.cmd("norm a" .. output)
@@ -426,7 +432,7 @@ local function print_output_no_sandwich()
 		local key = vim.api.nvim_replace_termcodes("<Right>", true, true, true)
 		vim.api.nvim_feedkeys(key, "i", false)
 	end
-end
+end --}}}
 
 local function apply_color() --{{{
 	api.nvim_win_hide(win)
