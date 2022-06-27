@@ -159,7 +159,7 @@ local function update_output() --{{{
 	local arg3 = tostring(color_values[3])
 
 	if output_type == "rgb" then
-		output = "rgb(" .. arg1 .. "," .. arg2 .. "," .. arg3 .. ")"
+		output = "rgb(" .. arg1 .. ", " .. arg2 .. ", " .. arg3 .. ")"
 	elseif output_type == "hex" then
 		if color_mode == "rgb" then
 			output = rgbToHex(arg1, arg2, arg3)
@@ -167,7 +167,7 @@ local function update_output() --{{{
 			output = hslToHex(arg1, arg2, arg3)
 		end
 	elseif output_type == "hsl" then
-		output = "hsl(" .. arg1 .. "," .. arg2 .. "%," .. arg3 .. "%)"
+		output = "hsl(" .. arg1 .. ", " .. arg2 .. "%, " .. arg3 .. "%)"
 	end
 
 	local fg_color = get_fg_color()
@@ -178,7 +178,7 @@ local function update_output() --{{{
 		vim.cmd(":highlight ColorPickerOutput guifg=" .. fg_color .. " guibg=" .. hslToHex(arg1, arg2, arg3))
 	end
 
-	output_extmark = ext(3, 0, output, "ColorPickerOutput", "right_align")
+	output_extmark = ext(3, 0, output:gsub("%s+", ""), "ColorPickerOutput", "right_align")
 end --}}}
 
 local function change_output_type() --{{{
@@ -433,7 +433,7 @@ local function print_output_no_sandwich() --{{{
 		vim.cmd("normal! a" .. output)
 	else
 		vim.cmd("startinsert")
-		vim.cmd("norm a" .. output)
+		vim.cmd("norm i" .. output)
 
 		local key = vim.api.nvim_replace_termcodes("<Right>", true, true, true)
 		vim.api.nvim_feedkeys(key, "i", false)
