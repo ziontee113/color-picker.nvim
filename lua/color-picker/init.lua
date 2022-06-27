@@ -13,3 +13,5 @@ vim.api.nvim_create_user_command("PickColorInsert", function()
 end, {})
 
 M.setup = utils_window.setup
+
+return M

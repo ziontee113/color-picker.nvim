@@ -668,8 +668,10 @@ end --}}}
 -------------------------------------
 
 M.setup = function(user_settings) --{{{
-	for key, value in pairs(user_settings) do
-		M.user_settings[key] = user_settings[key]
+	if user_settings then
+		for key, value in pairs(user_settings) do
+			M.user_settings[key] = user_settings[key]
+		end
 	end
 end --}}}
 
