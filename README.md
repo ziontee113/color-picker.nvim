@@ -38,13 +38,11 @@ require("color-picker").setup({
 	-- ["icons"] = { "", "" },
 })
 
-vim.cmd([[hi FloatBorder guibg=NONE]]) -- if you don't want wierd border background colors around the popup.
+vim.cmd([[hi FloatBorder guibg=NONE]]) -- if you don't want weird border background colors around the popup.
 ```
 
 ## Todo:
 
-- Add support for Transparency (rgba, hsla)
-- Add support for Manually Typing the number
 - Write README properly instead of relying on the Youtube video.
 
 ## Feedback
