@@ -32,14 +32,18 @@ local opts = { noremap = true, silent = true }
 vim.keymap.set("n", "<C-c>", "<cmd>PickColor<cr>", opts)
 vim.keymap.set("i", "<C-c>", "<cmd>PickColorInsert<cr>", opts)
 
--- only need setup() if you want to change progress bar icons
+-- only need setup() if you want to change progress bar icons or set / remap the picker's keymaps
 require("color-picker").setup({
 	-- ["icons"] = { "ﱢ", "" },
 	-- ["icons"] = { "ﮊ", "" },
 	-- ["icons"] = { "", "ﰕ" },
-	["icons"] = { "ﱢ", "" },
 	-- ["icons"] = { "", "" },
 	-- ["icons"] = { "", "" },
+	["icons"] = { "ﱢ", "" },
+	["keymap"] = { -- mapping example:
+		["U"] = "<Plug>Slider5Decrease",
+		["O"] = "<Plug>Slider5Increase",
+	},
 })
 
 vim.cmd([[hi FloatBorder guibg=NONE]]) -- if you don't want weird border background colors around the popup.
@@ -48,6 +52,7 @@ vim.cmd([[hi FloatBorder guibg=NONE]]) -- if you don't want weird border backgro
 ## Todo:
 
 - Write README properly instead of relying on the Youtube video.
+- Write Help Docs.
 
 ## Feedback
 
