@@ -273,7 +273,7 @@ local function check_valid_number(curline) --{{{
 					color_values[curline] = 0
 				end
 			else
-				if (color_values[curline] > 100 or color_values[curline]) < 0 then
+				if color_values[curline] > 100 or color_values[curline] < 0 then
 					color_values[curline] = 0
 				end
 			end
