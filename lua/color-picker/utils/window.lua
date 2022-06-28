@@ -132,6 +132,14 @@ local function update_boxes(line) --{{{
 		arithmetic = color_values[line] / 10 - floor
 	end
 
+	-- transparency slider implementation
+	local space_relativity = 10
+	if transparency_mode == true then
+		space_relativity = 16
+		arithmetic = math.ceil(arithmetic * 1.6)
+		floor = math.ceil(floor * 1.6)
+	end
+
 	local box_string = " "
 
 	if arithmetic ~= 0 then
@@ -141,11 +149,6 @@ local function update_boxes(line) --{{{
 	for _ = 1, floor, 1 do
 		-- box_string = "ﱢ" .. box_string
 		box_string = M.user_settings.icons[1] .. box_string
-	end
-
-	local space_relativity = 10
-	if transparency_mode == true then
-		space_relativity = 16
 	end
 
 	for _ = 1, space_relativity - floor do
