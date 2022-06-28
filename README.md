@@ -44,7 +44,8 @@ vim.cmd([[hi FloatBorder guibg=NONE]]) -- if you don't want wierd border backgro
 ## Todo:
 
 - Add support for Transparency (rgba, hsla)
-  If you run into issues or come up with an awesome idea, please feel free to open an issue or PR.
+- Add support for Manually Typing the number
+- Write README properly instead of relying on the Youtube video.
 
 ## Feedback
 
@@ -57,4 +58,5 @@ The project is licensed under MIT license. See [LICENSE](./LICENSE) file for det
 ## Credits
 
 ### @max397574 for creating https://github.com/max397574/colortils.nvim. I learned a lot how to do Neovim UI from his work.
+
 ### And I'm very sorry I didn't credit him in my initial post.
