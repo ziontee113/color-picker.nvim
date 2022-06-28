@@ -197,8 +197,9 @@ local function update_output() --{{{
 	if output_type == "rgb" then
 		if color_mode == "hsl" then
 			local converted_rgb = HSLToRGB(arg1, arg2, arg3)
-			output = "rgb("
+			output = "rgb"
 				.. alpha_string
+				.. "("
 				.. converted_rgb[1]
 				.. ", "
 				.. converted_rgb[2]
