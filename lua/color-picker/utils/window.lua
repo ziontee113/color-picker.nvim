@@ -474,6 +474,27 @@ local function manual_numeric_input_process()
 				set_color_line_value(actual_key, line)
 			else
 				local new_value = actual_key + color_values[line] * 10
+
+				if color_mode == "rgb" then
+					if new_value > 255 then
+						new_value = 255
+					end
+				else -- color_mode == "hsl"
+					if line == 1 then
+						if new_value > 360 then
+							new_value = 360
+						end
+					else
+						if new_value > 100 then
+							new_value = 100
+						end
+					end
+				end
+
+				if line == 5 and new_value > 100 then
+					new_value = 100
+				end
+
 				set_color_line_value(new_value, line)
 			end
 
@@ -484,7 +505,9 @@ local function manual_numeric_input_process()
 			end
 		else
 			local actual_char = vim.fn.nr2char(keynum)
-			api.nvim_feedkeys(actual_char, "n", true)
+			if actual_char ~= "n" then
+				api.nvim_feedkeys(actual_char, "n", true)
+			end
 		end
 	end
 end
