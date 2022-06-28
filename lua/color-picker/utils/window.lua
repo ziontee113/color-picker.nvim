@@ -453,8 +453,8 @@ end --}}}
 
 local function detect_colors(str) --{{{
 	local hex_pattern = "#%x%x%x%x%x%x"
-	local rgb_pattern = "rgb%(%s*%d+%s*,%s*%d+%s*,%s*%d+%s*%)"
-	local hsl_pattern = "hsl%(%s*%d+%s*%%*,%s*%d+%s*%%*,%s*%d+%s*%%*%)"
+	local rgb_pattern = "rgba?%(%s*%d+%s*,%s*%d+%s*,%s*%d+%s*.*%)"
+	local hsl_pattern = "hsla?%(%s*%d+%s*%%*,%s*%d+%s*%%*,%s*%d+%s*%%*%)"
 
 	local results = {}
 	local patterns = { hex_pattern, rgb_pattern, hsl_pattern }
@@ -518,20 +518,24 @@ end --}}}
 
 local function sandwich_processor(str) --{{{
 	local hex_capture_pattern = "#(%x%x%x%x%x%x)"
-	local rgb_capture_pattern = "rgb%(%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*%)"
-	local hsl_capture_pattern = "hsl%(%s*(%d+)%s*,%s*(%d+)%s*%%*,%s*(%d+)%s*%%*%)"
+	local rgb_capture_pattern = "rgba?%(%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*,?%s*(%d+%.?%d+)%s*%)"
+	local hsl_capture_pattern = "hsla?%(%s*(%d+)%s*,%s*(%d+)%s*%%*,%s*(%d+)%s*%%,?%s*(%d+%.?%d+)%s*%)"
 
-	local _, _, r, g, b = string.find(str, rgb_capture_pattern)
+	local _, _, r, g, b, rgba = string.find(str, rgb_capture_pattern)
 	local _, _, hex = string.find(str, hex_capture_pattern)
-	local _, _, h, s, l = string.find(str, hsl_capture_pattern)
+	local _, _, h, s, l, hsla = string.find(str, hsl_capture_pattern)
+
+	local return_value = {}
 
 	if hex then
 		return { "hex", hex }
 	elseif r then
-		return { "rgb", tonumber(r), tonumber(g), tonumber(b) }
+		return { "rgb", tonumber(r), tonumber(g), tonumber(b), tonumber(rgba) }
 	elseif h then
-		return { "hsl", tonumber(h), tonumber(s), tonumber(l) }
+		return { "hsl", tonumber(h), tonumber(s), tonumber(l), tonumber(hsla) }
 	end
+
+	return return_value
 end --}}}
 
 -------------------------------------
@@ -757,16 +761,25 @@ M.pop = function(insert_or_normal_mode) --{{{
 
 	-- detect & try to parse cursor colors {{{
 	local detected_sandwich = sandwich_detector(target_buf, target_line, target_pos)
+
 	if detected_sandwich then
 		local new_sandwich = sandwich_processor(detected_sandwich)
 
-		if new_sandwich[1] == "rgb" or new_sandwich[1] == "hsl" then
-			color_mode = new_sandwich[1]
-			color_values = { new_sandwich[2], new_sandwich[3], new_sandwich[4], color_values[4], color_values[5] }
-		else
-			local converted_hex = HexToRGB(new_sandwich[2])
-			color_mode = "rgb"
-			color_values = { converted_hex[1], converted_hex[2], converted_hex[3], color_values[4], color_values[5] }
+		if new_sandwich then
+			if new_sandwich[1] == "rgb" or new_sandwich[1] == "hsl" then
+				color_mode = new_sandwich[1]
+				color_values = { new_sandwich[2], new_sandwich[3], new_sandwich[4], color_values[4], color_values[5] }
+			else
+				local converted_hex = HexToRGB(new_sandwich[2])
+				color_mode = "rgb"
+				color_values = {
+					converted_hex[1],
+					converted_hex[2],
+					converted_hex[3],
+					color_values[4],
+					color_values[5],
+				}
+			end
 		end
 
 		set_color_marks(color_mode)
