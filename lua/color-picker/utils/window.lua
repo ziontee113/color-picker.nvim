@@ -8,6 +8,8 @@ local win = nil
 local buf = nil
 local ns = api.nvim_create_namespace("color-picker-popup")
 
+local mappings = {}
+
 -------------------------------------
 
 local rgbToHex = utils.rgbToHex
@@ -658,7 +660,7 @@ local function apply_color() --{{{
 end --}}}
 
 local function set_mappings() ---set default mappings for popup window{{{
-	local mappings = {
+	mappings = {
 		["j"] = function() --{{{ --> limit the user if transparency_mode == false
 			local line = api.nvim_win_get_cursor(0)[1]
 			if (transparency_mode == false and line < 4) or transparency_mode == true then
@@ -685,7 +687,7 @@ local function set_mappings() ---set default mappings for popup window{{{
 		["M"] = "<Plug>Slider50Percent",
 		["L"] = "<Plug>Slider100Percent",
 
-		["<Plug>Slider10Percent"] = function()
+		["<Plug>Slider10Percent"] = function() --{{{
 			local line = api.nvim_win_get_cursor(0)[1]
 			action_color_percent(10, line)
 		end,
@@ -716,9 +718,8 @@ local function set_mappings() ---set default mappings for popup window{{{
 		["<Plug>Slider90Percent"] = function()
 			local line = api.nvim_win_get_cursor(0)[1]
 			action_color_percent(90, line)
-		end,
-
-		["0"] = "<Plug>Slider0Percent",
+		end, --}}}
+		["0"] = "<Plug>Slider0Percent", --{{{
 		["1"] = "<Plug>Slider10Percent",
 		["2"] = "<Plug>Slider20Percent",
 		["3"] = "<Plug>Slider30Percent",
@@ -727,7 +728,7 @@ local function set_mappings() ---set default mappings for popup window{{{
 		["6"] = "<Plug>Slider60Percent",
 		["7"] = "<Plug>Slider70Percent",
 		["8"] = "<Plug>Slider80Percent",
-		["9"] = "<Plug>Slider90Percent",
+		["9"] = "<Plug>Slider90Percent", --}}}
 
 		["<Plug>Slider10Decrease"] = function() --{{{ wasd hl increment
 			action_color_increment(10, "decrease")
@@ -749,8 +750,7 @@ local function set_mappings() ---set default mappings for popup window{{{
 		["<Plug>Slider1Increase"] = function()
 			action_color_increment(1, "increase")
 		end, --}}}
-
-		["h"] = "<Plug>Slider1Decrease",
+		["h"] = "<Plug>Slider1Decrease", --{{{
 		["l"] = "<Plug>Slider1Increase",
 		["u"] = "<Plug>Slider5Decrease",
 		["i"] = "<Plug>Slider5Increase",
@@ -761,9 +761,9 @@ local function set_mappings() ---set default mappings for popup window{{{
 		["s"] = "<Plug>Slider10Decrease",
 		["w"] = "<Plug>Slider10Increase",
 		["S"] = "<Plug>Slider10Decrease",
-		["W"] = "<Plug>Slider10Increase",
+		["W"] = "<Plug>Slider10Increase", --}}}
 
-		["<Plug>SetActionGroup1and2"] = function()
+		["<Plug>SetActionGroup1and2"] = function() --{{{
 			set_action_group({ 1, 2 })
 		end,
 		["<Plug>SetActionGroup2and3"] = function()
@@ -777,13 +777,12 @@ local function set_mappings() ---set default mappings for popup window{{{
 		end,
 		["<Plug>ClearActionGroup"] = function()
 			set_action_group({})
-		end,
-
-		["gu"] = "<Plug>SetActionGroup1and2",
+		end, --}}}
+		["gu"] = "<Plug>SetActionGroup1and2", --{{{
 		["gd"] = "<Plug>SetActionGroup2and3",
 		["go"] = "<Plug>SetActionGroup123",
 		["gm"] = "<Plug>SetActionGroup1and3",
-		["x"] = "<Plug>ClearActionGroup",
+		["x"] = "<Plug>ClearActionGroup", --}}}
 
 		["q"] = ":q<cr>",
 		["<Esc>"] = ":q<cr>",
@@ -908,7 +907,13 @@ end --}}}
 M.setup = function(user_settings) --{{{
 	if user_settings then
 		for key, value in pairs(user_settings) do
-			M.user_settings[key] = user_settings[key]
+			if key == "keymap" then
+				for keymap, keymap_target in ipairs(value) do
+					mappings[keymap] = keymap_target
+				end
+			else
+				M.user_settings[key] = user_settings[key]
+			end
 		end
 	end
 end --}}}
