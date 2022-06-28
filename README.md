@@ -48,6 +48,40 @@ require("color-picker").setup({
 
 vim.cmd([[hi FloatBorder guibg=NONE]]) -- if you don't want weird border background colors around the popup.
 ```
+### Available Commands:
+
+```
+<Plug>Slider10Decrease
+<Plug>Slider10Increase
+<Plug>Slider5Decrease
+<Plug>Slider5Increase
+<Plug>Slider1Decrease
+<Plug>Slider1Increase
+
+<Plug>Slider0Percent
+<Plug>Slider10Percent
+<Plug>Slider20Percent
+<Plug>Slider30Percent
+<Plug>Slider40Percent
+<Plug>Slider50Percent
+<Plug>Slider60Percent
+<Plug>Slider70Percent
+<Plug>Slider80Percent
+<Plug>Slider90Percent
+<Plug>Slider100Percent
+
+<Plug>SetActionGroup1and2
+<Plug>SetActionGroup2and3
+<Plug>SetActionGroup123
+<Plug>SetActionGroup1and3
+<Plug>ClearActionGroup
+
+<Plug>ChangeOutputType
+<Plug>ChangeColorMode
+<Plug>ApplyColor
+<Plug>ToggleTransparency
+<Plug>NumericInput
+```
 
 ## Todo:
 
