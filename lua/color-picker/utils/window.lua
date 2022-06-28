@@ -508,7 +508,7 @@ local function manual_numeric_input_process(line) --{{{
 			local new_value = actual_key
 
 			if manual_numeric_input_count > 0 then
-				if #action_group then
+				if #action_group > 0 then
 					new_value = actual_key + color_values[action_group[1]] * 10
 				else
 					if line ~= 4 then
