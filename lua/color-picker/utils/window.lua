@@ -42,6 +42,8 @@ local action_group = {}
 local print_output_mode = nil
 local sandwich_mode = false
 
+local transparency_mode = false
+
 local target_buf = nil
 local target_line = nil
 local target_pos = nil
@@ -286,7 +288,20 @@ end --}}}
 -------------------------------------
 
 local function toggle_transparency_slider()
-	N("we here")
+	local win_width = api.nvim_win_get_width(win)
+	local win_height = api.nvim_win_get_height(win)
+
+	if transparency_mode == false then
+		transparency_mode = true
+
+		api.nvim_win_set_width(win, win_width + 5)
+		api.nvim_win_set_height(win, win_height + 1)
+	else
+		transparency_mode = false
+
+		api.nvim_win_set_width(win, win_width - 5)
+		api.nvim_win_set_height(win, win_height - 1)
+	end
 end
 
 -------------------------------------
