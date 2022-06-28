@@ -779,6 +779,7 @@ M.pop = function(insert_or_normal_mode) --{{{
 		if new_sandwich then
 			if new_sandwich[1] == "rgb" or new_sandwich[1] == "hsl" then
 				color_mode = new_sandwich[1]
+				output_type = new_sandwich[1]
 				color_values = { new_sandwich[2], new_sandwich[3], new_sandwich[4], color_values[4], color_values[5] }
 
 				if #new_sandwich == 5 then --> if rgba or hsla
@@ -793,6 +794,7 @@ M.pop = function(insert_or_normal_mode) --{{{
 			else
 				local converted_hex = HexToRGB(new_sandwich[2])
 				color_mode = "rgb"
+				output_type = "hex"
 				color_values = {
 					converted_hex[1],
 					converted_hex[2],
