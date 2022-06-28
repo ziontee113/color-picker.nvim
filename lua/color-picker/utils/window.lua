@@ -8,7 +8,7 @@ local win = nil
 local buf = nil
 local ns = api.nvim_create_namespace("color-picker-popup")
 
-local mappings = {}
+local user_mappings = {}
 
 -------------------------------------
 
@@ -660,7 +660,7 @@ local function apply_color() --{{{
 end --}}}
 
 local function set_mappings() ---set default mappings for popup window{{{
-	mappings = {
+	local mappings = {
 		["j"] = function() --{{{ --> limit the user if transparency_mode == false
 			local line = api.nvim_win_get_cursor(0)[1]
 			if (transparency_mode == false and line < 4) or transparency_mode == true then
@@ -816,6 +816,10 @@ local function set_mappings() ---set default mappings for popup window{{{
 	for key, mapping in pairs(mappings) do
 		vim.keymap.set("n", key, mapping, { buffer = buf, silent = true })
 	end
+
+	for key, mapping in pairs(user_mappings) do
+		vim.keymap.set("n", key, mapping, { buffer = buf, silent = true })
+	end
 end --}}}
 
 M.pop = function(insert_or_normal_mode) --{{{
@@ -908,9 +912,7 @@ M.setup = function(user_settings) --{{{
 	if user_settings then
 		for key, value in pairs(user_settings) do
 			if key == "keymap" then
-				for keymap, keymap_target in pairs(value) do
-					mappings[keymap] = keymap_target
-				end
+				user_mappings = value
 			else
 				M.user_settings[key] = user_settings[key]
 			end
