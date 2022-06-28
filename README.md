@@ -8,6 +8,10 @@ A powerful plugin that lets Neovim Users choose & modify colors. This plugin sup
 
 You can watch the full demo of the plugin here: [Color Picker for Neovim! - color-picker.nvim Plugin Showcase](https://youtu.be/eWRoxJatH8A)
 
+![color picker 2](https://user-images.githubusercontent.com/102876811/176300677-7f12b1f7-1bc2-421b-8944-af45f01088fe.png)
+
+Transparency Slider & Numeric Input Update: [Transparency Slider Support! - color-picker.nvim Development Update](https://youtu.be/lm7LAOFkceA)
+
 ## Requirements:
 
 Neovim `0.7` or higher.
