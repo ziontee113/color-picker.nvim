@@ -285,6 +285,12 @@ end --}}}
 
 -------------------------------------
 
+local function toggle_transparency_slider()
+	N("we here")
+end
+
+-------------------------------------
+
 local function set_color_line_value(value, line) --{{{
 	local increment = value - color_values[line]
 	change_color_value(increment, "increase")
@@ -603,6 +609,10 @@ local function set_mappings() ---set default mappings for popup window{{{
 		end,
 		["<CR>"] = function()
 			apply_color()
+		end,
+
+		["t"] = function()
+			toggle_transparency_slider()
 		end,
 	}
 
