@@ -389,15 +389,6 @@ local function toggle_transparency_slider() --{{{
 	update_number(5, 0)
 end --}}}
 
-local function manual_numeric_input_start()
-	local ok, keynum = pcall(vim.fn.getchar)
-
-	if ok then
-		local actual_key = keynum - 48
-		N(actual_key)
-	end
-end
-
 -------------------------------------
 
 local function set_color_line_value(value, line) --{{{
@@ -465,6 +456,25 @@ local function set_action_group(group) --{{{
 
 	set_color_marks(color_mode)
 end --}}}
+
+-------------------------------------
+
+local function manual_numeric_input_start()
+	local ok, keynum = pcall(vim.fn.getchar)
+
+	if ok then
+		local actual_key = keynum - 48
+
+		if actual_key >= 0 and actual_key <= 9 then
+			local line = api.nvim_win_get_cursor(0)[1]
+
+			set_color_line_value(actual_key, line)
+		else
+			local actual_char = vim.fn.nr2char(keynum)
+			api.nvim_feedkeys(actual_char, "n", true)
+		end
+	end
+end
 
 -------------------------------------
 
