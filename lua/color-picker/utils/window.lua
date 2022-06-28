@@ -668,105 +668,100 @@ local function set_mappings() ---set default mappings for popup window{{{
 			end
 		end, --}}}
 
-		["M"] = function() --{{{ HML percent set
+		["<Plug>Slider50Percent"] = function() --{{{ HML percent set
 			local line = api.nvim_win_get_cursor(0)[1]
 			action_color_percent(50, line)
 		end,
-		["H"] = function()
+		["<Plug>Slider0Percent"] = function()
 			local line = api.nvim_win_get_cursor(0)[1]
 			action_color_percent(0, line)
 		end,
-		["L"] = function()
+		["<Plug>Slider100Percent"] = function()
 			local line = api.nvim_win_get_cursor(0)[1]
 			action_color_percent(100, line)
 		end, --}}}
 
-		["0"] = function() --{{{ 0-9 ) percent set
-			local line = api.nvim_win_get_cursor(0)[1]
-			action_color_percent(0, line)
-		end,
-		["1"] = function()
+		["H"] = "<Plug>Slider0Percent",
+		["M"] = "<Plug>Slider50Percent",
+		["L"] = "<Plug>Slider100Percent",
+
+		["<Plug>Slider10Percent"] = function()
 			local line = api.nvim_win_get_cursor(0)[1]
 			action_color_percent(10, line)
 		end,
-		["2"] = function()
+		["<Plug>Slider20Percent"] = function()
 			local line = api.nvim_win_get_cursor(0)[1]
 			action_color_percent(20, line)
 		end,
-		["3"] = function()
+		["<Plug>Slider30Percent"] = function()
 			local line = api.nvim_win_get_cursor(0)[1]
 			action_color_percent(30, line)
 		end,
-		["4"] = function()
+		["<Plug>Slider40Percent"] = function()
 			local line = api.nvim_win_get_cursor(0)[1]
 			action_color_percent(40, line)
 		end,
-		["5"] = function()
-			local line = api.nvim_win_get_cursor(0)[1]
-			action_color_percent(50, line)
-		end,
-		["6"] = function()
+		["<Plug>Slider60Percent"] = function()
 			local line = api.nvim_win_get_cursor(0)[1]
 			action_color_percent(60, line)
 		end,
-		["7"] = function()
+		["<Plug>Slider70Percent"] = function()
 			local line = api.nvim_win_get_cursor(0)[1]
 			action_color_percent(70, line)
 		end,
-		["8"] = function()
+		["<Plug>Slider80Percent"] = function()
 			local line = api.nvim_win_get_cursor(0)[1]
 			action_color_percent(80, line)
 		end,
-		["9"] = function()
+		["<Plug>Slider90Percent"] = function()
 			local line = api.nvim_win_get_cursor(0)[1]
 			action_color_percent(90, line)
 		end,
-		[")"] = function()
-			local line = api.nvim_win_get_cursor(0)[1]
-			action_color_percent(100, line)
-		end, --}}}
 
-		["S"] = function() --{{{ wasd hl increment
+		["0"] = "<Plug>Slider0Percent",
+		["1"] = "<Plug>Slider10Percent",
+		["2"] = "<Plug>Slider20Percent",
+		["3"] = "<Plug>Slider30Percent",
+		["4"] = "<Plug>Slider40Percent",
+		["5"] = "<Plug>Slider50Percent",
+		["6"] = "<Plug>Slider60Percent",
+		["7"] = "<Plug>Slider70Percent",
+		["8"] = "<Plug>Slider80Percent",
+		["9"] = "<Plug>Slider90Percent",
+
+		["<Plug>Slider10Decrease"] = function() --{{{ wasd hl increment
 			action_color_increment(10, "decrease")
 		end,
-		["W"] = function()
+		["<Plug>Slider10Increase"] = function()
 			action_color_increment(10, "increase")
 		end,
 
-		["A"] = function()
+		["<Plug>Slider5Decrease"] = function()
 			action_color_increment(5, "decrease")
 		end,
-		["D"] = function()
+		["<Plug>Slider5Increase"] = function()
 			action_color_increment(5, "increase")
 		end,
 
-		["s"] = function()
-			action_color_increment(10, "decrease")
-		end,
-		["w"] = function()
-			action_color_increment(10, "increase")
-		end,
-
-		["a"] = function()
-			action_color_increment(5, "decrease")
-		end,
-		["d"] = function()
-			action_color_increment(5, "increase")
-		end,
-
-		["u"] = function()
-			action_color_increment(5, "decrease")
-		end,
-		["i"] = function()
-			action_color_increment(5, "increase")
-		end,
-
-		["h"] = function()
+		["<Plug>Slider1Decrease"] = function()
 			action_color_increment(1, "decrease")
 		end,
-		["l"] = function()
+		["<Plug>Slider1Increase"] = function()
 			action_color_increment(1, "increase")
 		end, --}}}
+
+		["h"] = "<Plug>Slider1Decrease",
+		["l"] = "<Plug>Slider1Increase",
+		["u"] = "<Plug>Slider5Decrease",
+		["i"] = "<Plug>Slider5Increase",
+		["a"] = "<Plug>Slider5Decrease",
+		["d"] = "<Plug>Slider5Increase",
+		["A"] = "<Plug>Slider5Decrease",
+		["D"] = "<Plug>Slider5Increase",
+		["s"] = "<Plug>Slider10Decrease",
+		["w"] = "<Plug>Slider10Increase",
+		["S"] = "<Plug>Slider10Decrease",
+		["W"] = "<Plug>Slider10Increase",
 
 		["<Leader>1"] = function() --{{{ --- setting action group
 			set_action_group({ 1, 2 })
