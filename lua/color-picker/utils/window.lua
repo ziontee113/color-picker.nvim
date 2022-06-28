@@ -35,7 +35,7 @@ local color_mode = "rgb"
 local color_mode_extmarks = {}
 local alpha_slider_A = nil
 local color_value_extmarks = {}
-local color_values = { 0, 0, 0, 0 }
+local color_values = { 0, 0, 0, nil, 100 }
 local boxes_extmarks = {}
 local output_extmark = {}
 local output = nil
@@ -62,7 +62,9 @@ local function create_empty_lines() ---create empty lines in the popup so we can
 end --}}}
 
 local function delete_ext(id) -- shortcut for delete extmarks given an id{{{
-	api.nvim_buf_del_extmark(buf, ns, id)
+	if id then
+		api.nvim_buf_del_extmark(buf, ns, id)
+	end
 end --}}}
 
 local function ext(row, col, text, hl_group, virt_text_pos) ---shortcut to create extmarks{{{
@@ -229,20 +231,32 @@ local function change_color_value(increment, modify, line) --{{{
 	local pass = false
 
 	if modify == "increase" then
-		if color_mode == "rgb" and (colorValue + increment <= 255) then
-			pass = true
-		elseif color_mode == "hsl" then
-			if curline == 1 and (colorValue + increment <= 360) then
-				pass = true
-			elseif colorValue + increment <= 100 then
+		if curline == 5 then --> modifying transparency slider
+			if colorValue + increment <= 100 then
 				pass = true
 			end
+		else
+			if color_mode == "rgb" and (colorValue + increment <= 255) then
+				pass = true
+			elseif color_mode == "hsl" then
+				if curline == 1 and (colorValue + increment <= 360) then
+					pass = true
+				elseif colorValue + increment <= 100 then
+					pass = true
+				end
+			end
 		end
-	else
-		if color_mode == "rgb" and (colorValue + increment >= 0) then
-			pass = true
-		elseif color_mode == "hsl" and (colorValue + increment >= 0) then
-			pass = true
+	else -- decrease
+		if curline == 5 then
+			if colorValue + increment >= 0 then
+				pass = true
+			end
+		else
+			if color_mode == "rgb" and (colorValue + increment >= 0) then
+				pass = true
+			elseif color_mode == "hsl" and (colorValue + increment >= 0) then
+				pass = true
+			end
 		end
 	end
 
@@ -279,7 +293,7 @@ local function setup_virt_text() ---create initial virtual text{{{
 	end
 
 	-- second column
-	local color_values_text = { "   0", "   0", "   0", "   1" }
+	local color_values_text = { "   0", "   0", "   0", " 100" }
 
 	for i, value in ipairs(color_values_text) do
 		if i == 4 then
@@ -487,14 +501,14 @@ end --}}}
 
 local function set_mappings() ---set default mappings for popup window{{{
 	local mappings = {
-		["j"] = function()
+		["j"] = function() --{{{ --> limit the user if transparency_mode == false
 			local line = api.nvim_win_get_cursor(0)[1]
 			if (transparency_mode == false and line < 4) or transparency_mode == true then
 				vim.cmd([[norm! j]])
 			else
 				-- do something
 			end
-		end,
+		end, --}}}
 
 		["M"] = function() --{{{ HML percent set
 			local line = api.nvim_win_get_cursor(0)[1]
@@ -674,7 +688,7 @@ M.pop = function(insert_or_normal_mode) --{{{
 	})
 
 	-- reset color values, action_group & initialize the UI
-	color_values = { 0, 0, 0, 0 }
+	color_values = { 0, 0, 0, nil, 100 }
 	transparency_mode = false
 	action_group = {}
 	set_mappings()
