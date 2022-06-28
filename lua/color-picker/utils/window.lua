@@ -710,6 +710,7 @@ local function set_mappings() ---set default mappings for popup window{{{
 		["H"] = "<Plug>Slider0Percent",
 		["M"] = "<Plug>Slider50Percent",
 		["L"] = "<Plug>Slider100Percent",
+		[")"] = "<Plug>Slider100Percent",
 
 		["<Plug>Slider10Percent"] = function() --{{{
 			local line = api.nvim_win_get_cursor(0)[1]
