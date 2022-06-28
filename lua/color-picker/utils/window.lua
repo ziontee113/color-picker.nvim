@@ -201,7 +201,17 @@ local function update_output() --{{{
 			output = hslToHex(arg1, arg2, arg3)
 		end
 	elseif output_type == "hsl" then
-		output = "hsl" .. alpha_string .. "(" .. arg1 .. ", " .. arg2 .. "%, " .. arg3 .. alpha_value_string .. "%)"
+		output = "hsl"
+			.. alpha_string
+			.. "("
+			.. arg1
+			.. ", "
+			.. arg2
+			.. "%, "
+			.. arg3
+			.. "%"
+			.. alpha_value_string
+			.. ")"
 	end
 
 	local fg_color = get_fg_color()
@@ -289,11 +299,13 @@ local function change_color_mode() --{{{
 	if color_mode == "rgb" then
 		color_mode = "hsl"
 		output_type = "hsl"
-		color_values = RGBToHSL(color_values[1], color_values[2], color_values[3])
+		local converted_color = RGBToHSL(color_values[1], color_values[2], color_values[3])
+		color_values = { converted_color[1], converted_color[2], converted_color[3], color_values[4], color_values[5] }
 	else
 		color_mode = "rgb"
 		output_type = "rgb"
-		color_values = HSLToRGB(color_values[1], color_values[2], color_values[3])
+		local converted_color = HSLToRGB(color_values[1], color_values[2], color_values[3])
+		color_values = { converted_color[1], converted_color[2], converted_color[3], color_values[4], color_values[5] }
 	end
 
 	set_color_marks(color_mode)
@@ -336,12 +348,12 @@ local function toggle_transparency_slider() --{{{
 	if transparency_mode == false then
 		transparency_mode = true
 
-		api.nvim_win_set_width(win, win_width + 5)
+		api.nvim_win_set_width(win, win_width + 4)
 		api.nvim_win_set_height(win, win_height + 1)
 	else
 		transparency_mode = false
 
-		api.nvim_win_set_width(win, win_width - 5)
+		api.nvim_win_set_width(win, win_width - 4)
 		api.nvim_win_set_height(win, win_height - 1)
 	end
 end --}}}
@@ -727,11 +739,11 @@ M.pop = function(insert_or_normal_mode) --{{{
 
 		if new_sandwich[1] == "rgb" or new_sandwich[1] == "hsl" then
 			color_mode = new_sandwich[1]
-			color_values = { new_sandwich[2], new_sandwich[3], new_sandwich[4] }
+			color_values = { new_sandwich[2], new_sandwich[3], new_sandwich[4], color_values[4], color_values[5] }
 		else
 			local converted_hex = HexToRGB(new_sandwich[2])
 			color_mode = "rgb"
-			color_values = { converted_hex[1], converted_hex[2], converted_hex[3] }
+			color_values = { converted_hex[1], converted_hex[2], converted_hex[3], color_values[4], color_values[5] }
 		end
 
 		set_color_marks(color_mode)
