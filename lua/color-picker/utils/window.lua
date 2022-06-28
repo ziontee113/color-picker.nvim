@@ -32,6 +32,7 @@ vim.cmd(":highlight ColorPickerActionGroup guifg=#00F1F5")
 local output_type = "rgb"
 local color_mode = "rgb"
 
+---@diagnostic disable-next-line: unused-local
 local alpha_slider_A = nil
 local potential_win_width = 6
 local global_space_relativity = 17
@@ -388,6 +389,15 @@ local function toggle_transparency_slider() --{{{
 	update_number(5, 0)
 end --}}}
 
+local function manual_numeric_input_start()
+	local ok, keynum = pcall(vim.fn.getchar)
+
+	if ok then
+		local actual_key = keynum - 48
+		N(actual_key)
+	end
+end
+
 -------------------------------------
 
 local function set_color_line_value(value, line) --{{{
@@ -733,6 +743,10 @@ local function set_mappings() ---set default mappings for popup window{{{
 
 		["t"] = function()
 			toggle_transparency_slider()
+		end,
+
+		["n"] = function()
+			manual_numeric_input_start()
 		end,
 	}
 
