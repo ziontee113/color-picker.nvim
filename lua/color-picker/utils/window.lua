@@ -32,8 +32,11 @@ vim.cmd(":highlight ColorPickerActionGroup guifg=#00F1F5")
 local output_type = "rgb"
 local color_mode = "rgb"
 
-local color_mode_extmarks = {}
 local alpha_slider_A = nil
+local potential_win_width = 6
+local global_space_relativity = 17
+
+local color_mode_extmarks = {}
 local color_value_extmarks = {}
 local color_values = { 0, 0, 0, nil, 100 }
 local boxes_extmarks = {}
@@ -135,9 +138,9 @@ local function update_boxes(line) --{{{
 	-- transparency slider implementation
 	local space_relativity = 10
 	if transparency_mode == true then
-		space_relativity = 16
-		arithmetic = math.ceil(arithmetic * 1.6)
-		floor = math.ceil(floor * 1.6)
+		space_relativity = global_space_relativity
+		arithmetic = math.ceil(arithmetic * space_relativity / 10)
+		floor = math.ceil(floor * space_relativity / 10)
 	end
 
 	local box_string = " "
@@ -366,12 +369,16 @@ local function toggle_transparency_slider() --{{{
 	if transparency_mode == false then
 		transparency_mode = true
 
-		api.nvim_win_set_width(win, win_width + 5)
+		api.nvim_win_set_width(win, win_width + potential_win_width)
 		api.nvim_win_set_height(win, win_height + 1)
+
+		if output_type == "hex" then
+			output_type = color_mode
+		end
 	else
 		transparency_mode = false
 
-		api.nvim_win_set_width(win, win_width - 5)
+		api.nvim_win_set_width(win, win_width - potential_win_width)
 		api.nvim_win_set_height(win, win_height - 1)
 	end
 
