@@ -103,4 +103,5 @@ The project is licensed under MIT license. See [LICENSE](./LICENSE) file for det
 
 ## Credits
 
-### @max397574 for creating https://github.com/max397574/colortils.nvim. I learned a lot how to do Neovim UI from his work.
+### @max397574 for creating https://github.com/max397574/colortils.nvim.
+### I learned a lot how to do Neovim UI from his work.
