@@ -763,60 +763,55 @@ local function set_mappings() ---set default mappings for popup window{{{
 		["S"] = "<Plug>Slider10Decrease",
 		["W"] = "<Plug>Slider10Increase",
 
-		["<Leader>1"] = function() --{{{ --- setting action group
+		["<Plug>SetActionGroup1and2"] = function()
 			set_action_group({ 1, 2 })
 		end,
-		["gu"] = function()
-			set_action_group({ 1, 2 })
-		end,
-		["<Leader>2"] = function()
+		["<Plug>SetActionGroup2and3"] = function()
 			set_action_group({ 2, 3 })
 		end,
-		["gd"] = function()
-			set_action_group({ 2, 3 })
-		end,
-		["<Leader>3"] = function()
+		["<Plug>SetActionGroup123"] = function()
 			set_action_group({ 1, 2, 3 })
 		end,
-		["go"] = function()
-			set_action_group({ 1, 2, 3 })
-		end,
-		["<Leader>4"] = function()
+		["<Plug>SetActionGroup1and3"] = function()
 			set_action_group({ 1, 3 })
 		end,
-		["gm"] = function()
-			set_action_group({ 1, 3 })
-		end,
-		["<Leader>0"] = function()
+		["<Plug>ClearActionGroup"] = function()
 			set_action_group({})
 		end,
-		["<C-c>"] = function()
-			set_action_group({})
-		end,
-		["x"] = function()
-			set_action_group({})
-		end, --}}}
+
+		["gu"] = "<Plug>SetActionGroup1and2",
+		["gd"] = "<Plug>SetActionGroup2and3",
+		["go"] = "<Plug>SetActionGroup123",
+		["gm"] = "<Plug>SetActionGroup1and3",
+		["x"] = "<Plug>ClearActionGroup",
 
 		["q"] = ":q<cr>",
 		["<Esc>"] = ":q<cr>",
 
-		["o"] = function()
+		["<Plug>ChangeOutputType"] = function()
 			change_output_type()
 		end,
-		["r"] = function()
+		["o"] = "<Plug>ChangeOutputType",
+
+		["<Plug>ChangeColorMode"] = function()
 			change_color_mode()
 		end,
-		["<CR>"] = function()
+		["r"] = "<Plug>ChangeColorMode",
+
+		["<Plug>ApplyColor"] = function()
 			apply_color()
 		end,
+		["<cr>"] = "<Plug>ApplyColor",
 
-		["t"] = function()
+		["<Plug>ToggleTransparency"] = function()
 			toggle_transparency_slider()
 		end,
+		["t"] = "<Plug>ToggleTransparency",
 
-		["n"] = function()
+		["<Plug>NumericInput"] = function()
 			manual_numeric_input_start()
 		end,
+		["n"] = "<Plug>NumericInput",
 	}
 
 	for key, mapping in pairs(mappings) do
