@@ -518,24 +518,28 @@ end --}}}
 
 local function sandwich_processor(str) --{{{
 	local hex_capture_pattern = "#(%x%x%x%x%x%x)"
-	local rgb_capture_pattern = "rgba?%(%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*,?%s*(%d+%.?%d+)%s*%)"
-	local hsl_capture_pattern = "hsla?%(%s*(%d+)%s*,%s*(%d+)%s*%%*,%s*(%d+)%s*%%,?%s*(%d+%.?%d+)%s*%)"
+	local rgba_capture_pattern = "rgba%(%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*,?%s*(%d+%.?%d+)%s*%)"
+	local hsla_capture_pattern = "hsla%(%s*(%d+)%s*,%s*(%d+)%s*%%*,%s*(%d+)%s*%%,?%s*(%d+%.?%d+)%s*%)"
+	local rgb_capture_pattern = "rgb%(%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*,?%s*%)"
+	local hsl_capture_pattern = "hsl%(%s*(%d+)%s*,%s*(%d+)%s*%%*,%s*(%d+)%s*%%,?%s*%)"
 
-	local _, _, r, g, b, rgba = string.find(str, rgb_capture_pattern)
 	local _, _, hex = string.find(str, hex_capture_pattern)
-	local _, _, h, s, l, hsla = string.find(str, hsl_capture_pattern)
-
-	local return_value = {}
+	local _, _, ra, ga, ba, rgba = string.find(str, rgba_capture_pattern)
+	local _, _, ha, sa, la, hsla = string.find(str, hsla_capture_pattern)
+	local _, _, r, g, b = string.find(str, rgb_capture_pattern)
+	local _, _, h, s, l = string.find(str, hsl_capture_pattern)
 
 	if hex then
 		return { "hex", hex }
+	elseif ra then
+		return { "rgb", tonumber(ra), tonumber(ga), tonumber(ba), tonumber(rgba) }
+	elseif ha then
+		return { "hsl", tonumber(ha), tonumber(sa), tonumber(la), tonumber(hsla) }
 	elseif r then
-		return { "rgb", tonumber(r), tonumber(g), tonumber(b), tonumber(rgba) }
+		return { "rgb", tonumber(r), tonumber(g), tonumber(b) }
 	elseif h then
-		return { "hsl", tonumber(h), tonumber(s), tonumber(l), tonumber(hsla) }
+		return { "hsl", tonumber(h), tonumber(s), tonumber(l) }
 	end
-
-	return return_value
 end --}}}
 
 -------------------------------------
@@ -769,6 +773,16 @@ M.pop = function(insert_or_normal_mode) --{{{
 			if new_sandwich[1] == "rgb" or new_sandwich[1] == "hsl" then
 				color_mode = new_sandwich[1]
 				color_values = { new_sandwich[2], new_sandwich[3], new_sandwich[4], color_values[4], color_values[5] }
+
+				if #new_sandwich == 5 then --> if rgba or hsla
+					color_values[5] = new_sandwich[5] * 100
+					if color_values[5] > 100 then
+						color_values[5] = 100
+					end
+
+					update_number(5, 0)
+					toggle_transparency_slider()
+				end
 			else
 				local converted_hex = HexToRGB(new_sandwich[2])
 				color_mode = "rgb"
