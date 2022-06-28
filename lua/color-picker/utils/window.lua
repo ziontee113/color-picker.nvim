@@ -33,6 +33,7 @@ local output_type = "rgb"
 local color_mode = "rgb"
 
 local color_mode_extmarks = {}
+local alpha_slider_A = nil
 local color_value_extmarks = {}
 local color_values = { 0, 0, 0 }
 local boxes_extmarks = {}
@@ -85,7 +86,9 @@ local function set_color_marks(marks) --{{{
 		color_mode_extmarks[i] = ext(i - 1, 0, string.upper(value), nil, "overlay")
 	end
 
-	-- action_group
+	alpha_slider_A = ext(4, 0, "A", nil, "overlay")
+
+	-- action_group highlighting --
 	if #action_group > 0 then
 		for _, line in ipairs(action_group) do
 			delete_ext(color_mode_extmarks[line])
@@ -488,14 +491,6 @@ local function set_mappings() ---set default mappings for popup window{{{
 				-- do something
 			end
 		end,
-		-- ["k"] = function()
-		-- 	local line = api.nvim_win_get_cursor(0)[1]
-		-- 	if transparency_mode == false and line < 4 then
-		-- 		vim.cmd([[norm! k]])
-		-- 	else
-		-- 		-- do something
-		-- 	end
-		-- end,
 
 		["M"] = function() --{{{ HML percent set
 			local line = api.nvim_win_get_cursor(0)[1]
