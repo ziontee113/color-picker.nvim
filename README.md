@@ -50,6 +50,7 @@ vim.cmd([[hi FloatBorder guibg=NONE]]) -- if you don't want weird border backgro
 ```
 ### Available Commands:
 
+<details Available Commands>
 ```
 <Plug>Slider10Decrease
 <Plug>Slider10Increase
@@ -82,6 +83,7 @@ vim.cmd([[hi FloatBorder guibg=NONE]]) -- if you don't want weird border backgro
 <Plug>ToggleTransparency
 <Plug>NumericInput
 ```
+<details/>
 
 ## Todo:
 
