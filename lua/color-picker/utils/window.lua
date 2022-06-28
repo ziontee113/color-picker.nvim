@@ -35,7 +35,7 @@ local color_mode = "rgb"
 local color_mode_extmarks = {}
 local alpha_slider_A = nil
 local color_value_extmarks = {}
-local color_values = { 0, 0, 0 }
+local color_values = { 0, 0, 0, 0 }
 local boxes_extmarks = {}
 local output_extmark = {}
 local output = nil
@@ -279,10 +279,14 @@ local function setup_virt_text() ---create initial virtual text{{{
 	end
 
 	-- second column
-	local color_values_text = { "   0", "   0", "   0" }
+	local color_values_text = { "   0", "   0", "   0", "   1" }
 
 	for i, value in ipairs(color_values_text) do
-		color_value_extmarks[i] = ext(i - 1, 0, value)
+		if i == 4 then
+			color_value_extmarks[5] = ext(4, 0, value)
+		else
+			color_value_extmarks[i] = ext(i - 1, 0, value)
+		end
 	end
 
 	--- last row
@@ -670,7 +674,7 @@ M.pop = function(insert_or_normal_mode) --{{{
 	})
 
 	-- reset color values, action_group & initialize the UI
-	color_values = { 0, 0, 0 }
+	color_values = { 0, 0, 0, 0 }
 	transparency_mode = false
 	action_group = {}
 	set_mappings()
