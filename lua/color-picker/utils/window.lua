@@ -908,7 +908,7 @@ M.setup = function(user_settings) --{{{
 	if user_settings then
 		for key, value in pairs(user_settings) do
 			if key == "keymap" then
-				for keymap, keymap_target in ipairs(value) do
+				for keymap, keymap_target in pairs(value) do
 					mappings[keymap] = keymap_target
 				end
 			else
