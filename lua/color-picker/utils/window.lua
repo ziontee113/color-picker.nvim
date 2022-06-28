@@ -127,6 +127,11 @@ local function update_boxes(line) --{{{
 		end
 	end
 
+	if line == 5 then --> for alpha slider
+		floor = math.floor(color_values[line] / 10)
+		arithmetic = color_values[line] / 10 - floor
+	end
+
 	local box_string = " "
 
 	if arithmetic ~= 0 then
@@ -343,6 +348,10 @@ local function set_color_line_percent(percent, line) --{{{
 		else
 			value = percent
 		end
+	end
+
+	if line == 5 then
+		value = percent
 	end
 
 	local increment = value - color_values[line]
@@ -694,6 +703,7 @@ M.pop = function(insert_or_normal_mode) --{{{
 	set_mappings()
 	create_empty_lines()
 	setup_virt_text()
+	update_boxes(5)
 
 	-- detect & try to parse cursor colors {{{
 	local detected_sandwich = sandwich_detector(target_buf, target_line, target_pos)
