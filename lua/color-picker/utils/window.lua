@@ -259,8 +259,32 @@ local function change_output_type() --{{{
 	update_output()
 end --}}}
 
+local function check_valid_number(curline) --{{{
+	if curline == 5 and color_values[curline] > 100 then
+		color_values[curline] = 100
+	else
+		if color_mode == "rgb" then
+			if color_values[curline] > 255 or color_values[curline] < 0 then
+				color_values[curline] = 0
+			end
+		else -- hsl
+			if curline == 1 then
+				if color_values[curline] > 360 or color_values[curline] < 0 then
+					color_values[curline] = 0
+				end
+			else
+				if (color_values[curline] > 100 or color_values[curline]) < 0 then
+					color_values[curline] = 0
+				end
+			end
+		end
+	end
+
+	return color_values[curline]
+end --}}}
+
 local function update_number(curline, increment) --{{{
-	local colorValue = color_values[curline]
+	local colorValue = check_valid_number(curline)
 	delete_ext(color_value_extmarks[curline])
 
 	local new_value = colorValue + increment
@@ -611,8 +635,8 @@ end --}}}
 
 local function sandwich_processor(str) --{{{
 	local hex_capture_pattern = "#(%x%x%x%x%x%x)"
-	local rgba_capture_pattern = "rgba%(%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*,?%s*(%d+%.?%d+)%s*%)"
-	local hsla_capture_pattern = "hsla%(%s*(%d+)%s*,%s*(%d+)%s*%%*,%s*(%d+)%s*%%,?%s*(%d+%.?%d+)%s*%)"
+	local rgba_capture_pattern = "rgba%(%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*,?%s*(%d+%.?%d*)%s*%)"
+	local hsla_capture_pattern = "hsla%(%s*(%d+)%s*,%s*(%d+)%s*%%*,%s*(%d+)%s*%%,?%s*(%d+%.?%d*)%s*%)"
 	local rgb_capture_pattern = "rgb%(%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*,?%s*%)"
 	local hsl_capture_pattern = "hsl%(%s*(%d+)%s*,%s*(%d+)%s*%%*,%s*(%d+)%s*%%,?%s*%)"
 
