@@ -56,6 +56,7 @@ local function create_empty_lines() ---create empty lines in the popup so we can
 		"",
 		"",
 		"",
+		"",
 	})
 end --}}}
 
@@ -287,7 +288,7 @@ end --}}}
 
 -------------------------------------
 
-local function toggle_transparency_slider()
+local function toggle_transparency_slider() --{{{
 	local win_width = api.nvim_win_get_width(win)
 	local win_height = api.nvim_win_get_height(win)
 
@@ -302,7 +303,7 @@ local function toggle_transparency_slider()
 		api.nvim_win_set_width(win, win_width - 5)
 		api.nvim_win_set_height(win, win_height - 1)
 	end
-end
+end --}}}
 
 -------------------------------------
 
@@ -335,7 +336,7 @@ local function action_color_percent(percent, line) --{{{
 			set_color_line_percent(percent, cur_line)
 		end
 	else
-		if line > 3 then
+		if line == 4 then
 			set_color_line_percent(percent, 1)
 			set_color_line_percent(percent, 2)
 			set_color_line_percent(percent, 3)
@@ -352,7 +353,7 @@ local function action_color_value(increment, modify) --{{{
 		end
 	else
 		local curline = api.nvim_win_get_cursor(0)[1]
-		if curline > 3 then
+		if curline == 4 then
 			for line = 1, 3 do
 				change_color_value(increment, modify, line)
 			end
@@ -479,6 +480,23 @@ end --}}}
 
 local function set_mappings() ---set default mappings for popup window{{{
 	local mappings = {
+		["j"] = function()
+			local line = api.nvim_win_get_cursor(0)[1]
+			if (transparency_mode == false and line < 4) or transparency_mode == true then
+				vim.cmd([[norm! j]])
+			else
+				-- do something
+			end
+		end,
+		-- ["k"] = function()
+		-- 	local line = api.nvim_win_get_cursor(0)[1]
+		-- 	if transparency_mode == false and line < 4 then
+		-- 		vim.cmd([[norm! k]])
+		-- 	else
+		-- 		-- do something
+		-- 	end
+		-- end,
+
 		["M"] = function() --{{{ HML percent set
 			local line = api.nvim_win_get_cursor(0)[1]
 			action_color_percent(50, line)
@@ -658,6 +676,7 @@ M.pop = function(insert_or_normal_mode) --{{{
 
 	-- reset color values, action_group & initialize the UI
 	color_values = { 0, 0, 0 }
+	transparency_mode = false
 	action_group = {}
 	set_mappings()
 	create_empty_lines()
@@ -693,6 +712,7 @@ M.pop = function(insert_or_normal_mode) --{{{
 
 	print_output_mode = insert_or_normal_mode --}}}
 
+	vim.api.nvim_win_set_option(win, "scrolloff", 0)
 	vim.api.nvim_buf_set_option(buf, "modifiable", false)
 end --}}}
 
