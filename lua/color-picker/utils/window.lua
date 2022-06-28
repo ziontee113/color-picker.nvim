@@ -392,8 +392,28 @@ end --}}}
 -------------------------------------
 
 local function set_color_line_value(value, line) --{{{
+	if color_mode == "rgb" then
+		if value > 255 then
+			value = 255
+		end
+	else -- color_mode == "hsl"
+		if line == 1 then
+			if value > 360 then
+				value = 360
+			end
+		else
+			if value > 100 then
+				value = 100
+			end
+		end
+	end
+
+	if line == 5 and value > 100 then
+		value = 100
+	end
+
 	local increment = value - color_values[line]
-	change_color_value(increment, "increase")
+	change_color_value(increment, "increase", line)
 end --}}}
 
 local function set_color_line_percent(percent, line) --{{{
@@ -434,7 +454,7 @@ local function action_color_percent(percent, line) --{{{
 	end
 end --}}}
 
-local function action_color_value(increment, modify) --{{{
+local function action_color_increment(increment, modify) --{{{
 	if #action_group > 0 then
 		for _, line in ipairs(action_group) do
 			change_color_value(increment, modify, line)
@@ -451,6 +471,22 @@ local function action_color_value(increment, modify) --{{{
 	end
 end --}}}
 
+local function action_color_value(value, line) --{{{
+	if #action_group > 0 then
+		for _, cur_line in ipairs(action_group) do
+			set_color_line_value(value, cur_line)
+		end
+	else
+		if line == 4 then
+			set_color_line_value(value, 1)
+			set_color_line_value(value, 2)
+			set_color_line_value(value, 3)
+		else
+			set_color_line_value(value, line)
+		end
+	end
+end --}}}
+
 local function set_action_group(group) --{{{
 	action_group = group
 
@@ -461,42 +497,29 @@ end --}}}
 
 local manual_numeric_input_count = 0
 
-local function manual_numeric_input_process()
+local function manual_numeric_input_process(line) --{{{
 	local ok, keynum = pcall(vim.fn.getchar)
 
 	if ok then
 		local actual_key = keynum - 48
 
 		if actual_key >= 0 and actual_key <= 9 then -- key pressed is 0 to 9
-			local line = api.nvim_win_get_cursor(0)[1]
+			line = line or api.nvim_win_get_cursor(0)[1]
+			local new_value = actual_key
 
-			if manual_numeric_input_count == 0 then
-				set_color_line_value(actual_key, line)
-			else
-				local new_value = actual_key + color_values[line] * 10
-
-				if color_mode == "rgb" then
-					if new_value > 255 then
-						new_value = 255
-					end
-				else -- color_mode == "hsl"
-					if line == 1 then
-						if new_value > 360 then
-							new_value = 360
-						end
+			if manual_numeric_input_count > 0 then
+				if #action_group then
+					new_value = actual_key + color_values[action_group[1]] * 10
+				else
+					if line ~= 4 then
+						new_value = actual_key + color_values[line] * 10
 					else
-						if new_value > 100 then
-							new_value = 100
-						end
+						new_value = actual_key + color_values[1] * 10
 					end
 				end
-
-				if line == 5 and new_value > 100 then
-					new_value = 100
-				end
-
-				set_color_line_value(new_value, line)
 			end
+
+			action_color_value(new_value, line)
 
 			if manual_numeric_input_count < 2 then
 				manual_numeric_input_count = manual_numeric_input_count + 1
@@ -510,12 +533,12 @@ local function manual_numeric_input_process()
 			end
 		end
 	end
-end
+end --}}}
 
-local function manual_numeric_input_start()
+local function manual_numeric_input_start() --{{{
 	manual_numeric_input_count = 0
 	manual_numeric_input_process()
-end
+end --}}}
 
 -------------------------------------
 
@@ -704,45 +727,45 @@ local function set_mappings() ---set default mappings for popup window{{{
 		end, --}}}
 
 		["S"] = function() --{{{ wasd hl increment
-			action_color_value(10, "decrease")
+			action_color_increment(10, "decrease")
 		end,
 		["W"] = function()
-			action_color_value(10, "increase")
+			action_color_increment(10, "increase")
 		end,
 
 		["A"] = function()
-			action_color_value(5, "decrease")
+			action_color_increment(5, "decrease")
 		end,
 		["D"] = function()
-			action_color_value(5, "increase")
+			action_color_increment(5, "increase")
 		end,
 
 		["s"] = function()
-			action_color_value(10, "decrease")
+			action_color_increment(10, "decrease")
 		end,
 		["w"] = function()
-			action_color_value(10, "increase")
+			action_color_increment(10, "increase")
 		end,
 
 		["a"] = function()
-			action_color_value(5, "decrease")
+			action_color_increment(5, "decrease")
 		end,
 		["d"] = function()
-			action_color_value(5, "increase")
+			action_color_increment(5, "increase")
 		end,
 
 		["u"] = function()
-			action_color_value(5, "decrease")
+			action_color_increment(5, "decrease")
 		end,
 		["i"] = function()
-			action_color_value(5, "increase")
+			action_color_increment(5, "increase")
 		end,
 
 		["h"] = function()
-			action_color_value(1, "decrease")
+			action_color_increment(1, "decrease")
 		end,
 		["l"] = function()
-			action_color_value(1, "increase")
+			action_color_increment(1, "increase")
 		end, --}}}
 
 		["<Leader>1"] = function() --{{{ --- setting action group
