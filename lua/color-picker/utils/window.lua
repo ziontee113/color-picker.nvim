@@ -171,13 +171,28 @@ local function update_output() --{{{
 	local arg1 = tostring(color_values[1])
 	local arg2 = tostring(color_values[2])
 	local arg3 = tostring(color_values[3])
+	local alpha_value = tostring(color_values[5] / 100)
+
+	local alpha_string = ""
+	local alpha_value_string = ""
+	if transparency_mode == true then
+		alpha_string = "a"
+		alpha_value_string = ", " .. alpha_value
+	end
 
 	if output_type == "rgb" then
 		if color_mode == "hsl" then
 			local converted_rgb = HSLToRGB(arg1, arg2, arg3)
-			output = "rgb(" .. converted_rgb[1] .. ", " .. converted_rgb[2] .. ", " .. converted_rgb[3] .. ")"
+			output = "rgb("
+				.. alpha_string
+				.. converted_rgb[1]
+				.. ", "
+				.. converted_rgb[2]
+				.. ", "
+				.. converted_rgb[3]
+				.. ")"
 		else
-			output = "rgb(" .. arg1 .. ", " .. arg2 .. ", " .. arg3 .. ")"
+			output = "rgb" .. alpha_string .. "(" .. arg1 .. ", " .. arg2 .. ", " .. arg3 .. alpha_value_string .. ")"
 		end
 	elseif output_type == "hex" then
 		if color_mode == "rgb" then
@@ -186,7 +201,7 @@ local function update_output() --{{{
 			output = hslToHex(arg1, arg2, arg3)
 		end
 	elseif output_type == "hsl" then
-		output = "hsl(" .. arg1 .. ", " .. arg2 .. "%, " .. arg3 .. "%)"
+		output = "hsl" .. alpha_string .. "(" .. arg1 .. ", " .. arg2 .. "%, " .. arg3 .. alpha_value_string .. "%)"
 	end
 
 	local fg_color = get_fg_color()
