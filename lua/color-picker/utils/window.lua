@@ -143,7 +143,12 @@ local function update_boxes(line) --{{{
 		box_string = M.user_settings.icons[1] .. box_string
 	end
 
-	for _ = 1, 10 - floor do
+	local space_relativity = 10
+	if transparency_mode == true then
+		space_relativity = 16
+	end
+
+	for _ = 1, space_relativity - floor do
 		box_string = box_string .. " "
 	end
 
@@ -312,6 +317,7 @@ local function change_color_mode() --{{{
 	update_number(1, 0)
 	update_number(2, 0)
 	update_number(3, 0)
+	update_number(5, 0)
 end --}}}
 
 local function setup_virt_text() ---create initial virtual text{{{
@@ -348,14 +354,19 @@ local function toggle_transparency_slider() --{{{
 	if transparency_mode == false then
 		transparency_mode = true
 
-		api.nvim_win_set_width(win, win_width + 4)
+		api.nvim_win_set_width(win, win_width + 5)
 		api.nvim_win_set_height(win, win_height + 1)
 	else
 		transparency_mode = false
 
-		api.nvim_win_set_width(win, win_width - 4)
+		api.nvim_win_set_width(win, win_width - 5)
 		api.nvim_win_set_height(win, win_height - 1)
 	end
+
+	update_number(1, 0)
+	update_number(2, 0)
+	update_number(3, 0)
+	update_number(5, 0)
 end --}}}
 
 -------------------------------------
