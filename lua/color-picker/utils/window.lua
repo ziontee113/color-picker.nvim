@@ -234,13 +234,22 @@ local function update_output() --{{{
 end --}}}
 
 local function change_output_type() --{{{
-	if output_type == "rgb" then
-		output_type = "hsl"
-	elseif output_type == "hsl" then
-		output_type = "hex"
-	elseif output_type == "hex" then
-		output_type = "rgb"
+	if transparency_mode == true then
+		if output_type == "rgb" then
+			output_type = "hsl"
+		elseif output_type == "hsl" then
+			output_type = "rgb"
+		end
+	else
+		if output_type == "rgb" then
+			output_type = "hsl"
+		elseif output_type == "hsl" then
+			output_type = "hex"
+		elseif output_type == "hex" then
+			output_type = "rgb"
+		end
 	end
+
 	update_output()
 end --}}}
 
