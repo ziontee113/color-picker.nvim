@@ -459,21 +459,39 @@ end --}}}
 
 -------------------------------------
 
-local function manual_numeric_input_start()
+local manual_numeric_input_count = 0
+
+local function manual_numeric_input_process()
 	local ok, keynum = pcall(vim.fn.getchar)
 
 	if ok then
 		local actual_key = keynum - 48
 
-		if actual_key >= 0 and actual_key <= 9 then
+		if actual_key >= 0 and actual_key <= 9 then -- key pressed is 0 to 9
 			local line = api.nvim_win_get_cursor(0)[1]
 
-			set_color_line_value(actual_key, line)
+			if manual_numeric_input_count == 0 then
+				set_color_line_value(actual_key, line)
+			else
+				local new_value = actual_key + color_values[line] * 10
+				set_color_line_value(new_value, line)
+			end
+
+			if manual_numeric_input_count < 2 then
+				manual_numeric_input_count = manual_numeric_input_count + 1
+				vim.cmd([[redraw]])
+				manual_numeric_input_process()
+			end
 		else
 			local actual_char = vim.fn.nr2char(keynum)
 			api.nvim_feedkeys(actual_char, "n", true)
 		end
 	end
+end
+
+local function manual_numeric_input_start()
+	manual_numeric_input_count = 0
+	manual_numeric_input_process()
 end
 
 -------------------------------------
