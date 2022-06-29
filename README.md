@@ -32,7 +32,6 @@ local opts = { noremap = true, silent = true }
 vim.keymap.set("n", "<C-c>", "<cmd>PickColor<cr>", opts)
 vim.keymap.set("i", "<C-c>", "<cmd>PickColorInsert<cr>", opts)
 
--- only need setup() if you want to change progress bar icons or set / remap the picker's keymaps
 require("color-picker").setup({
 	-- ["icons"] = { "ﱢ", "" },
 	-- ["icons"] = { "ﮊ", "" },
