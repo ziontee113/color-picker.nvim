@@ -21,7 +21,11 @@ Neovim `0.7` or higher.
 For Packer
 
 ```lua
-use "ziontee113/color-picker.nvim"
+use ({"ziontee113/color-picker.nvim",
+    config = function()
+        require("color-picker")
+    end,
+})
 ```
 
 ## Set Things Up:
@@ -32,7 +36,7 @@ local opts = { noremap = true, silent = true }
 vim.keymap.set("n", "<C-c>", "<cmd>PickColor<cr>", opts)
 vim.keymap.set("i", "<C-c>", "<cmd>PickColorInsert<cr>", opts)
 
-require("color-picker").setup({
+require("color-picker").setup({ -- for changing icons & mappings
 	-- ["icons"] = { "ﱢ", "" },
 	-- ["icons"] = { "ﮊ", "" },
 	-- ["icons"] = { "", "ﰕ" },
