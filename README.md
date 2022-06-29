@@ -64,6 +64,13 @@ By default:
 - Number `0` to `9` will set the slider at your cursor to certain percentages. `0` sets to 0%, `9` sets to 90%, `5` sets to 50%.
 - `H` sets to 0%, `M` sets to 50%, `L` sets to 100%.
 
+#### Multiple Sliders
+
+By default:
+- If your slider is on the `4th` line (the same line as the color output preview), when you increment / set a color value, it will apply that change to all 3 sliders above it.
+- `gu` will select the 1st and 2nd sliders, `gd` will select the 2nd and 3rd sliders, `gm` will select the 1st and 3rd sliders.
+- Press `x` will deselect the slider group.
+
 #### Converting Colors (RGB/HEX/HSL)
 - When your cursor is on a corlor, use `:PickColor` to open up the picker, then press `o` to change the output type to `RGB/HEX/HSL`. Press `Enter` and the color under your cursor will be converted.
 
