@@ -51,10 +51,26 @@ require("color-picker").setup({ -- for changing icons & mappings
 
 vim.cmd([[hi FloatBorder guibg=NONE]]) -- if you don't want weird border background colors around the popup.
 ```
+
+### Features:
+
+#### Picking Colors
+
+By default:
+- `h` and `l` will increment the color slider value by 1.
+- `u` and `i` / `a` and `d` / `A` and `D` will increment the color slider value by 5.
+- `s` and `w` / `S` and `W` will increment the color slider value by 10.
+
+#### Converting Colors (RGB/HEX/HSL)
+- When your cursor is on a corlor, use `:PickColor` to open up the picker, then press `o` to change the output type to `RGB/HEX/HSL`. Press `Enter` and the color under your cursor will be converted.
+
+#### Transparency Mode
+- Press `t` to toggle Transparency Slider. While this mode is active, you will only be able to output the color as `rgba()` or `hsla()`. If you want to output as `HEX`, press `t` to get out of Transparency Mode, and you'll be able to press `o` to output your color as `HEX`.
+
 ### Available Commands:
 
 <details>
-<summary>Available Commands</summary>
+<summary>Click this Dropdown to see Available Commands</summary>
 	
 ```
 <Plug>Slider10Decrease
