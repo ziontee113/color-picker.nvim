@@ -57,6 +57,7 @@ vim.cmd([[hi FloatBorder guibg=NONE]]) -- if you don't want weird border backgro
 #### Picking Colors:
 
 By default:
+
 - `h` and `l` will increment the color slider value by 1.
 - `u` and `i` / `a` and `d` / `A` and `D` will increment the color slider value by 5.
 - `s` and `w` / `S` and `W` will increment the color slider value by 10.
@@ -67,19 +68,22 @@ By default:
 #### Multiple Sliders:
 
 By default:
+
 - If your slider is on the `4th` line (the same line as the color output preview), when you increment / set a color value, it will apply that change to all 3 sliders above it.
 - `gu` will select the 1st and 2nd sliders, `gd` will select the 2nd and 3rd sliders, `gm` will select the 1st and 3rd sliders.
 - Press `x` will deselect the slider group.
 
 #### Manual Numeric Input:
 
-- If you press `n`, you can press number keys to input the color value manually for individual sliders or slider group. If you press any key that is not a number key, it will execute that key as normal. 
+- If you press `n`, you can press number keys to input the color value manually for individual sliders or slider group. If you press any key that is not a number key, it will execute that key as normal.
 - For example: if you want to input 15 on the 1st slider: move your cursor to the 1st slider, press `n` then press `15`. Then you can press `k` to move on to the next slider. The slider values will update as you type out the numbers.
 
 #### Converting Colors (RGB/HEX/HSL)
+
 - When your cursor is on a corlor, use `:PickColor` to open up the picker, then press `o` to change the output type to `RGB/HEX/HSL`. Press `Enter` and the color under your cursor will be converted.
 
 #### Transparency Mode
+
 - Press `t` to toggle Transparency Slider. While this mode is active, you will only be able to output the color as `rgba()` or `hsla()`. If you want to output as `HEX`, press `t` to get out of Transparency Mode, and you'll be able to press `o` to output your color as `HEX`.
 
 ### Available Commands:
@@ -118,14 +122,10 @@ By default:
 <Plug>ApplyColor
 <Plug>ToggleTransparency
 <Plug>NumericInput
+
 ```
-	
+
 </details>
-
-## Todo:
-
-- Write README properly instead of relying on the Youtube video.
-- Write Help Docs.
 
 ## Feedback
 
@@ -139,3 +139,4 @@ The project is licensed under MIT license. See [LICENSE](./LICENSE) file for det
 
 ### @max397574 for creating https://github.com/max397574/colortils.nvim.
 ### I learned a lot how to do Neovim UI from his work.
+```
