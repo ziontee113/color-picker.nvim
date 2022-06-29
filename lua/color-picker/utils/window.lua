@@ -205,6 +205,7 @@ local function update_output() --{{{
 				.. converted_rgb[2]
 				.. ", "
 				.. converted_rgb[3]
+				.. alpha_value_string
 				.. ")"
 		else
 			output = "rgb" .. alpha_string .. "(" .. arg1 .. ", " .. arg2 .. ", " .. arg3 .. alpha_value_string .. ")"
@@ -837,6 +838,7 @@ local function set_mappings() ---set default mappings for popup window{{{
 			manual_numeric_input_start()
 		end,
 		["n"] = "<Plug>NumericInput",
+		["/"] = "<Plug>NumericInput",
 	}
 
 	for key, mapping in pairs(mappings) do
