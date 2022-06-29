@@ -52,7 +52,7 @@ require("color-picker").setup({ -- for changing icons & mappings
 vim.cmd([[hi FloatBorder guibg=NONE]]) -- if you don't want weird border background colors around the popup.
 ```
 
-### Features:
+## Features:
 
 #### Picking Colors
 
@@ -60,6 +60,9 @@ By default:
 - `h` and `l` will increment the color slider value by 1.
 - `u` and `i` / `a` and `d` / `A` and `D` will increment the color slider value by 5.
 - `s` and `w` / `S` and `W` will increment the color slider value by 10.
+
+- Number `0` to `9` will set the slider at your cursor to certain percentages. `0` sets to 0%, `9` sets to 90%, `5` sets to 50%.
+- `H` sets to 0%, `M` sets to 50%, `L` sets to 100%.
 
 #### Converting Colors (RGB/HEX/HSL)
 - When your cursor is on a corlor, use `:PickColor` to open up the picker, then press `o` to change the output type to `RGB/HEX/HSL`. Press `Enter` and the color under your cursor will be converted.
