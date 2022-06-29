@@ -1,0 +1,4 @@
+PickColor	color-picker.txt	/*PickColor*
+PickColorInsert	color-picker.txt	/*PickColorInsert*
+color-picker-usage	color-picker.txt	/*color-picker-usage*
+color-picker.nvim	color-picker.txt	/*color-picker.nvim*
