@@ -24,6 +24,7 @@ local HexToRGB = utils.HexToRGB
 M.user_settings = {
 	-- ["icons"] = { "ﮊ", "" },
 	["icons"] = { "ﱢ", "" },
+	["border"] = "rounded",
 }
 
 -------------------------------------
@@ -867,7 +868,7 @@ M.pop = function(insert_or_normal_mode) --{{{
 		row = 0,
 		style = "minimal",
 		height = 4,
-		border = "rounded",
+		border = M.user_settings.border,
 	})
 
 	-- reset color values, action_group & initialize the UI
