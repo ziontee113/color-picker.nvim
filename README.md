@@ -43,6 +43,7 @@ require("color-picker").setup({ -- for changing icons & mappings
 	-- ["icons"] = { "", "" },
 	-- ["icons"] = { "", "" },
 	["icons"] = { "ﱢ", "" },
+	["border"] = "rounded", -- none | single | double | rounded | solid | shadow
 	["keymap"] = { -- mapping example:
 		["U"] = "<Plug>Slider5Decrease",
 		["O"] = "<Plug>Slider5Increase",
@@ -139,3 +140,4 @@ The project is licensed under MIT license. See [LICENSE](./LICENSE) file for det
 
 ### @max397574 for creating https://github.com/max397574/colortils.nvim.
 ### I learned a lot how to do Neovim UI from his work.
+```
