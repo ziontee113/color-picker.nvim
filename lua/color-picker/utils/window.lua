@@ -676,8 +676,11 @@ local function print_output_no_sandwich() --{{{
 	end
 end --}}}
 
-local function apply_color() --{{{
-	api.nvim_win_hide(win)
+local function apply_color(no_close_win) --{{{
+	if no_close_win then
+	else
+		api.nvim_win_hide(win)
+	end
 
 	if sandwich_mode == true then
 		sandwich(target_buf, target_line, target_pos, output)
@@ -934,6 +937,64 @@ M.pop = function(insert_or_normal_mode) --{{{
 	vim.api.nvim_win_set_option(win, "scrolloff", 0)
 	vim.api.nvim_buf_set_option(buf, "modifiable", false)
 end --}}}
+
+-------------------------------------
+
+local function convert_cursor_color(rgb_or_hsl) --{{{
+	sandwich_mode = false
+
+	target_buf = api.nvim_get_current_buf()
+	target_line = api.nvim_get_current_line()
+	target_pos = api.nvim_win_get_cursor(0)
+	win = 0
+
+	local detected_sandwich = sandwich_detector(0, target_line, target_pos)
+
+	if detected_sandwich then
+		sandwich_mode = true
+		local new_sandwich = sandwich_processor(detected_sandwich)
+
+		if new_sandwich then
+			if new_sandwich[1] == "rgb" or new_sandwich[1] == "hsl" then
+				color_mode = new_sandwich[1]
+				color_values = { new_sandwich[2], new_sandwich[3], new_sandwich[4] }
+
+				if color_mode == "rgb" then
+					output = rgbToHex(new_sandwich[2], new_sandwich[3], new_sandwich[4])
+				else
+					output = hslToHex(new_sandwich[2], new_sandwich[3], new_sandwich[4])
+				end
+			else
+				local converted_hex = HexToRGB(new_sandwich[2])
+
+				if rgb_or_hsl == "rgb" then
+					output = "rgb"
+						.. "("
+						.. converted_hex[1]
+						.. ", "
+						.. converted_hex[2]
+						.. ", "
+						.. converted_hex[3]
+						.. ")"
+				else
+					converted_hex = RGBToHSL(converted_hex[1], converted_hex[2], converted_hex[3])
+					output = "hsl"
+						.. "("
+						.. converted_hex[1]
+						.. ", "
+						.. converted_hex[2]
+						.. "%, "
+						.. converted_hex[3]
+						.. "%)"
+				end
+			end
+		end
+
+		apply_color(true)
+	end
+end --}}}
+
+M.convert_cursor_color = convert_cursor_color
 
 -------------------------------------
 
