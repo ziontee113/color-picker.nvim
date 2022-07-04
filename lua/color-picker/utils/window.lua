@@ -700,149 +700,149 @@ local function set_mappings() ---set default mappings for popup window{{{
 			end
 		end, --}}}
 
-		["<Plug>Slider50Percent"] = function() --{{{ HML percent set
+		["<Plug>ColorPickerSlider50Percent"] = function() --{{{ HML percent set
 			local line = api.nvim_win_get_cursor(0)[1]
 			action_color_percent(50, line)
 		end,
-		["<Plug>Slider0Percent"] = function()
+		["<Plug>ColorPickerSlider0Percent"] = function()
 			local line = api.nvim_win_get_cursor(0)[1]
 			action_color_percent(0, line)
 		end,
-		["<Plug>Slider100Percent"] = function()
+		["<Plug>ColorPickerSlider100Percent"] = function()
 			local line = api.nvim_win_get_cursor(0)[1]
 			action_color_percent(100, line)
 		end, --}}}
 
-		["H"] = "<Plug>Slider0Percent",
-		["M"] = "<Plug>Slider50Percent",
-		["L"] = "<Plug>Slider100Percent",
-		[")"] = "<Plug>Slider100Percent",
+		["H"] = "<Plug>ColorPickerSlider0Percent",
+		["M"] = "<Plug>ColorPickerSlider50Percent",
+		["L"] = "<Plug>ColorPickerSlider100Percent",
+		[")"] = "<Plug>ColorPickerSlider100Percent",
 
-		["<Plug>Slider10Percent"] = function() --{{{
+		["<Plug>ColorPickerSlider10Percent"] = function() --{{{
 			local line = api.nvim_win_get_cursor(0)[1]
 			action_color_percent(10, line)
 		end,
-		["<Plug>Slider20Percent"] = function()
+		["<Plug>ColorPickerSlider20Percent"] = function()
 			local line = api.nvim_win_get_cursor(0)[1]
 			action_color_percent(20, line)
 		end,
-		["<Plug>Slider30Percent"] = function()
+		["<Plug>ColorPickerSlider30Percent"] = function()
 			local line = api.nvim_win_get_cursor(0)[1]
 			action_color_percent(30, line)
 		end,
-		["<Plug>Slider40Percent"] = function()
+		["<Plug>ColorPickerSlider40Percent"] = function()
 			local line = api.nvim_win_get_cursor(0)[1]
 			action_color_percent(40, line)
 		end,
-		["<Plug>Slider60Percent"] = function()
+		["<Plug>ColorPickerSlider60Percent"] = function()
 			local line = api.nvim_win_get_cursor(0)[1]
 			action_color_percent(60, line)
 		end,
-		["<Plug>Slider70Percent"] = function()
+		["<Plug>ColorPickerSlider70Percent"] = function()
 			local line = api.nvim_win_get_cursor(0)[1]
 			action_color_percent(70, line)
 		end,
-		["<Plug>Slider80Percent"] = function()
+		["<Plug>ColorPickerSlider80Percent"] = function()
 			local line = api.nvim_win_get_cursor(0)[1]
 			action_color_percent(80, line)
 		end,
-		["<Plug>Slider90Percent"] = function()
+		["<Plug>ColorPickerSlider90Percent"] = function()
 			local line = api.nvim_win_get_cursor(0)[1]
 			action_color_percent(90, line)
 		end, --}}}
-		["0"] = "<Plug>Slider0Percent", --{{{
-		["1"] = "<Plug>Slider10Percent",
-		["2"] = "<Plug>Slider20Percent",
-		["3"] = "<Plug>Slider30Percent",
-		["4"] = "<Plug>Slider40Percent",
-		["5"] = "<Plug>Slider50Percent",
-		["6"] = "<Plug>Slider60Percent",
-		["7"] = "<Plug>Slider70Percent",
-		["8"] = "<Plug>Slider80Percent",
-		["9"] = "<Plug>Slider90Percent", --}}}
+		["0"] = "<Plug>ColorPickerSlider0Percent", --{{{
+		["1"] = "<Plug>ColorPickerSlider10Percent",
+		["2"] = "<Plug>ColorPickerSlider20Percent",
+		["3"] = "<Plug>ColorPickerSlider30Percent",
+		["4"] = "<Plug>ColorPickerSlider40Percent",
+		["5"] = "<Plug>ColorPickerSlider50Percent",
+		["6"] = "<Plug>ColorPickerSlider60Percent",
+		["7"] = "<Plug>ColorPickerSlider70Percent",
+		["8"] = "<Plug>ColorPickerSlider80Percent",
+		["9"] = "<Plug>ColorPickerSlider90Percent", --}}}
 
-		["<Plug>Slider10Decrease"] = function() --{{{ wasd hl increment
+		["<Plug>ColorPickerSlider10Decrease"] = function() --{{{ wasd hl increment
 			action_color_increment(10, "decrease")
 		end,
-		["<Plug>Slider10Increase"] = function()
+		["<Plug>ColorPickerSlider10Increase"] = function()
 			action_color_increment(10, "increase")
 		end,
 
-		["<Plug>Slider5Decrease"] = function()
+		["<Plug>ColorPickerSlider5Decrease"] = function()
 			action_color_increment(5, "decrease")
 		end,
-		["<Plug>Slider5Increase"] = function()
+		["<Plug>ColorPickerSlider5Increase"] = function()
 			action_color_increment(5, "increase")
 		end,
 
-		["<Plug>Slider1Decrease"] = function()
+		["<Plug>ColorPickerSlider1Decrease"] = function()
 			action_color_increment(1, "decrease")
 		end,
-		["<Plug>Slider1Increase"] = function()
+		["<Plug>ColorPickerSlider1Increase"] = function()
 			action_color_increment(1, "increase")
 		end, --}}}
-		["h"] = "<Plug>Slider1Decrease", --{{{
-		["l"] = "<Plug>Slider1Increase",
-		["u"] = "<Plug>Slider5Decrease",
-		["i"] = "<Plug>Slider5Increase",
-		["a"] = "<Plug>Slider5Decrease",
-		["d"] = "<Plug>Slider5Increase",
-		["A"] = "<Plug>Slider5Decrease",
-		["D"] = "<Plug>Slider5Increase",
-		["s"] = "<Plug>Slider10Decrease",
-		["w"] = "<Plug>Slider10Increase",
-		["S"] = "<Plug>Slider10Decrease",
-		["W"] = "<Plug>Slider10Increase", --}}}
+		["h"] = "<Plug>ColorPickerSlider1Decrease", --{{{
+		["l"] = "<Plug>ColorPickerSlider1Increase",
+		["u"] = "<Plug>ColorPickerSlider5Decrease",
+		["i"] = "<Plug>ColorPickerSlider5Increase",
+		["a"] = "<Plug>ColorPickerSlider5Decrease",
+		["d"] = "<Plug>ColorPickerSlider5Increase",
+		["A"] = "<Plug>ColorPickerSlider5Decrease",
+		["D"] = "<Plug>ColorPickerSlider5Increase",
+		["s"] = "<Plug>ColorPickerSlider10Decrease",
+		["w"] = "<Plug>ColorPickerSlider10Increase",
+		["S"] = "<Plug>ColorPickerSlider10Decrease",
+		["W"] = "<Plug>ColorPickerSlider10Increase", --}}}
 
-		["<Plug>SetActionGroup1and2"] = function() --{{{
+		["<Plug>ColorPickerSetActionGroup1and2"] = function() --{{{
 			set_action_group({ 1, 2 })
 		end,
-		["<Plug>SetActionGroup2and3"] = function()
+		["<Plug>ColorPickerSetActionGroup2and3"] = function()
 			set_action_group({ 2, 3 })
 		end,
-		["<Plug>SetActionGroup123"] = function()
+		["<Plug>ColorPickerSetActionGroup123"] = function()
 			set_action_group({ 1, 2, 3 })
 		end,
-		["<Plug>SetActionGroup1and3"] = function()
+		["<Plug>ColorPickerSetActionGroup1and3"] = function()
 			set_action_group({ 1, 3 })
 		end,
-		["<Plug>ClearActionGroup"] = function()
+		["<Plug>ColorPickerClearActionGroup"] = function()
 			set_action_group({})
 		end, --}}}
-		["gu"] = "<Plug>SetActionGroup1and2", --{{{
-		["gd"] = "<Plug>SetActionGroup2and3",
-		["go"] = "<Plug>SetActionGroup123",
-		["gm"] = "<Plug>SetActionGroup1and3",
-		["x"] = "<Plug>ClearActionGroup", --}}}
+		["gu"] = "<Plug>ColorPickerSetActionGroup1and2", --{{{
+		["gd"] = "<Plug>ColorPickerSetActionGroup2and3",
+		["go"] = "<Plug>ColorPickerSetActionGroup123",
+		["gm"] = "<Plug>ColorPickerSetActionGroup1and3",
+		["x"] = "<Plug>ColorPickerClearActionGroup", --}}}
 
 		["q"] = ":q<cr>",
 		["<Esc>"] = ":q<cr>",
 
-		["<Plug>ChangeOutputType"] = function()
+		["<Plug>ColorPickerChangeOutputType"] = function()
 			change_output_type()
 		end,
-		["o"] = "<Plug>ChangeOutputType",
+		["o"] = "<Plug>ColorPickerChangeOutputType",
 
-		["<Plug>ChangeColorMode"] = function()
+		["<Plug>ColorPickerChangeColorMode"] = function()
 			change_color_mode()
 		end,
-		["r"] = "<Plug>ChangeColorMode",
+		["r"] = "<Plug>ColorPickerChangeColorMode",
 
-		["<Plug>ApplyColor"] = function()
+		["<Plug>ColorPickerApplyColor"] = function()
 			apply_color()
 		end,
-		["<cr>"] = "<Plug>ApplyColor",
+		["<cr>"] = "<Plug>ColorPickerApplyColor",
 
-		["<Plug>ToggleTransparency"] = function()
+		["<Plug>ColorPickerToggleTransparency"] = function()
 			toggle_transparency_slider()
 		end,
-		["t"] = "<Plug>ToggleTransparency",
+		["t"] = "<Plug>ColorPickerToggleTransparency",
 
-		["<Plug>NumericInput"] = function()
+		["<Plug>ColorPickerNumericInput"] = function()
 			manual_numeric_input_start()
 		end,
-		["n"] = "<Plug>NumericInput",
-		["/"] = "<Plug>NumericInput",
+		["n"] = "<Plug>ColorPickerNumericInput",
+		["/"] = "<Plug>ColorPickerNumericInput",
 	}
 
 	for key, mapping in pairs(mappings) do
