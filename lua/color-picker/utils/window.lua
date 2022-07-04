@@ -815,8 +815,10 @@ local function set_mappings() ---set default mappings for popup window{{{
 		["gm"] = "<Plug>ColorPickerSetActionGroup1and3",
 		["x"] = "<Plug>ColorPickerClearActionGroup", --}}}
 
-		["q"] = ":q<cr>",
-		["<Esc>"] = ":q<cr>",
+		["<Plug>ColorPickerCloseColorPicker"] = ":q<cr>",
+
+		["q"] = "<Plug>ColorPickerCloseColorPicker",
+		["<Esc>"] = "<Plug>ColorPickerCloseColorPicker",
 
 		["<Plug>ColorPickerChangeOutputType"] = function()
 			change_output_type()
