@@ -48,8 +48,8 @@ require("color-picker").setup({ -- for changing icons & mappings
 	["icons"] = { "ﱢ", "" },
 	["border"] = "rounded", -- none | single | double | rounded | solid | shadow
 	["keymap"] = { -- mapping example:
-		["U"] = "<Plug>Slider5Decrease",
-		["O"] = "<Plug>Slider5Increase",
+		["U"] = "<Plug>ColorPickerSlider5Decrease",
+		["O"] = "<Plug>ColorPickerSlider5Increase",
 	},
 })
 
@@ -97,36 +97,36 @@ By default:
 <summary>Click this Dropdown to see Available Commands</summary>
 	
 ```
-<Plug>Slider10Decrease
-<Plug>Slider10Increase
-<Plug>Slider5Decrease
-<Plug>Slider5Increase
-<Plug>Slider1Decrease
-<Plug>Slider1Increase
+<Plug>ColorPickerSlider10Decrease
+<Plug>ColorPickerSlider10Increase
+<Plug>ColorPickerSlider5Decrease
+<Plug>ColorPickerSlider5Increase
+<Plug>ColorPickerSlider1Decrease
+<Plug>ColorPickerSlider1Increase
 
-<Plug>Slider0Percent
-<Plug>Slider10Percent
-<Plug>Slider20Percent
-<Plug>Slider30Percent
-<Plug>Slider40Percent
-<Plug>Slider50Percent
-<Plug>Slider60Percent
-<Plug>Slider70Percent
-<Plug>Slider80Percent
-<Plug>Slider90Percent
-<Plug>Slider100Percent
+<Plug>ColorPickerSlider0Percent
+<Plug>ColorPickerSlider10Percent
+<Plug>ColorPickerSlider20Percent
+<Plug>ColorPickerSlider30Percent
+<Plug>ColorPickerSlider40Percent
+<Plug>ColorPickerSlider50Percent
+<Plug>ColorPickerSlider60Percent
+<Plug>ColorPickerSlider70Percent
+<Plug>ColorPickerSlider80Percent
+<Plug>ColorPickerSlider90Percent
+<Plug>ColorPickerSlider100Percent
 
-<Plug>SetActionGroup1and2
-<Plug>SetActionGroup2and3
-<Plug>SetActionGroup123
-<Plug>SetActionGroup1and3
-<Plug>ClearActionGroup
+<Plug>ColorPickerSetActionGroup1and2
+<Plug>ColorPickerSetActionGroup2and3
+<Plug>ColorPickerSetActionGroup123
+<Plug>ColorPickerSetActionGroup1and3
+<Plug>ColorPickerClearActionGroup
 
-<Plug>ChangeOutputType
-<Plug>ChangeColorMode
-<Plug>ApplyColor
-<Plug>ToggleTransparency
-<Plug>NumericInput
+<Plug>ColorPickerChangeOutputType
+<Plug>ColorPickerChangeColorMode
+<Plug>ColorPickerApplyColor
+<Plug>ColorPickerToggleTransparency
+<Plug>ColorPickerNumericInput
 
 ```
 
