@@ -850,6 +850,13 @@ local function set_mappings() ---set default mappings for popup window{{{
 	end
 
 	for key, mapping in pairs(user_mappings) do
+		-- handle old <Plug> mappings without ColorPicker prefix
+		if mapping:match("<Plug>") then
+			if not mapping:match("<Plug>ColorPicker") then
+				mapping = mapping:gsub("<Plug>", "<Plug>ColorPicker")
+			end
+		end
+
 		vim.keymap.set("n", key, mapping, { buffer = buf, silent = true })
 	end
 end --}}}
