@@ -25,6 +25,8 @@ M.user_settings = {
 	-- ["icons"] = { "ﮊ", "" },
 	["icons"] = { "ﱢ", "" },
 	["border"] = "rounded",
+	["background_highlight_group"] = "Normal",
+	["border_highlight_group"] = "FloatBorder",
 }
 
 -------------------------------------
@@ -882,6 +884,16 @@ M.pop = function(insert_or_normal_mode) --{{{
 		height = 4,
 		border = M.user_settings.border,
 	})
+
+	--attention
+	vim.api.nvim_win_set_option(
+		win,
+		"winhl",
+		"Normal:"
+			.. M.user_settings.background_highlight_group
+			.. ",FloatBorder:"
+			.. M.user_settings.border_highlight_group
+	)
 
 	-- reset color values, action_group & initialize the UI
 	color_values = { 0, 0, 0, nil, 100 }
