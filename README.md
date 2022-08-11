@@ -51,8 +51,8 @@ require("color-picker").setup({ -- for changing icons & mappings
 		["U"] = "<Plug>ColorPickerSlider5Decrease",
 		["O"] = "<Plug>ColorPickerSlider5Increase",
 	},
-	["background_highlight_group"] = "your_custom_highlight_group",
-	["border_highlight_group"] = "your_custom_highlight_group",
+	["background_highlight_group"] = "Normal", -- default
+	["border_highlight_group"] = "FloatBorder", -- default
 })
 
 vim.cmd([[hi FloatBorder guibg=NONE]]) -- if you don't want weird border background colors around the popup.
