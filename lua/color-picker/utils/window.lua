@@ -27,6 +27,7 @@ M.user_settings = {
 	["border"] = "rounded",
 	["background_highlight_group"] = "Normal",
 	["border_highlight_group"] = "FloatBorder",
+	["text_highlight_group"] = "Normal",
 }
 
 -------------------------------------
@@ -94,10 +95,10 @@ local function set_color_marks(marks) --{{{
 	end
 
 	for i, value in ipairs(t) do
-		color_mode_extmarks[i] = ext(i - 1, 0, string.upper(value), nil, "overlay")
+		color_mode_extmarks[i] = ext(i - 1, 0, string.upper(value), M.user_settings.text_highlight_group, "overlay")
 	end
 
-	alpha_slider_A = ext(4, 0, "A", nil, "overlay")
+	alpha_slider_A = ext(4, 0, "A", M.user_settings.text_highlight_group, "overlay")
 
 	-- action_group highlighting --
 	if #action_group > 0 then
@@ -164,7 +165,7 @@ local function update_boxes(line) --{{{
 		box_string = box_string .. " "
 	end
 
-	boxes_extmarks[line] = ext(line - 1, 0, box_string, nil, "right_align")
+	boxes_extmarks[line] = ext(line - 1, 0, box_string, M.user_settings.text_highlight_group, "right_align")
 end --}}}
 
 local function get_fg_color() --{{{
@@ -293,7 +294,8 @@ local function update_number(curline, increment) --{{{
 	delete_ext(color_value_extmarks[curline])
 
 	local new_value = colorValue + increment
-	color_value_extmarks[curline] = ext(curline - 1, 0, string_fix_right(new_value, 4))
+	color_value_extmarks[curline] =
+		ext(curline - 1, 0, string_fix_right(new_value, 4), M.user_settings.text_highlight_group)
 	color_values[curline] = new_value
 
 	update_boxes(curline)
@@ -374,7 +376,7 @@ local function setup_virt_text() ---create initial virtual text{{{
 	-- third column
 	local boxes_text = { "", "", "" }
 	for i, value in ipairs(boxes_text) do
-		boxes_extmarks[i] = ext(i - 1, 0, value, nil, "right_align")
+		boxes_extmarks[i] = ext(i - 1, 0, value, M.user_settings.text_highlight_group, "right_align")
 	end
 
 	-- second column
@@ -382,14 +384,14 @@ local function setup_virt_text() ---create initial virtual text{{{
 
 	for i, value in ipairs(color_values_text) do
 		if i == 4 then
-			color_value_extmarks[5] = ext(4, 0, value)
+			color_value_extmarks[5] = ext(4, 0, value, M.user_settings.text_highlight_group)
 		else
-			color_value_extmarks[i] = ext(i - 1, 0, value)
+			color_value_extmarks[i] = ext(i - 1, 0, value, M.user_settings.text_highlight_group)
 		end
 	end
 
 	--- last row
-	output_extmark = ext(3, 0, "rgb(0,0,0)", nil, "right_align")
+	output_extmark = ext(3, 0, "rgb(0,0,0)", M.user_settings.text_highlight_group, "right_align")
 end --}}}
 
 -------------------------------------

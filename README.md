@@ -53,6 +53,7 @@ require("color-picker").setup({ -- for changing icons & mappings
 	},
 	["background_highlight_group"] = "Normal", -- default
 	["border_highlight_group"] = "FloatBorder", -- default
+  ["text_highlight_group"] = "Normal", --default
 })
 
 vim.cmd([[hi FloatBorder guibg=NONE]]) -- if you don't want weird border background colors around the popup.
@@ -146,3 +147,4 @@ The project is licensed under MIT license. See [LICENSE](./LICENSE) file for det
 
 ### @max397574 for creating https://github.com/max397574/colortils.nvim.
 ### I learned a lot how to do Neovim UI from his work.
+```
