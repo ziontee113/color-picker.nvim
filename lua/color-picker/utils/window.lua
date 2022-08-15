@@ -193,9 +193,11 @@ local function update_output() --{{{
 
 	local alpha_string = ""
 	local alpha_value_string = ""
+	local transp_hex = ""
 	if transparency_mode == true then
 		alpha_string = "a"
 		alpha_value_string = ", " .. alpha_value
+        transp_hex = string.format("%02x", round(color_values[5]*(255/100) + 0.001)) -- added 0.001 for rounding 0.5 to 1
 	end
 
 	if output_type == "rgb" then
@@ -216,9 +218,9 @@ local function update_output() --{{{
 		end
 	elseif output_type == "hex" then
 		if color_mode == "rgb" then
-			output = rgbToHex(arg1, arg2, arg3)
+			output = rgbToHex(arg1, arg2, arg3) .. transp_hex
 		else
-			output = hslToHex(arg1, arg2, arg3)
+			output = hslToHex(arg1, arg2, arg3) .. transp_hex
 		end
 	elseif output_type == "hsl" then
 		output = "hsl"
@@ -246,21 +248,13 @@ local function update_output() --{{{
 end --}}}
 
 local function change_output_type() --{{{
-	if transparency_mode == true then
-		if output_type == "rgb" then
-			output_type = "hsl"
-		elseif output_type == "hsl" then
-			output_type = "rgb"
-		end
-	else
-		if output_type == "rgb" then
-			output_type = "hsl"
-		elseif output_type == "hsl" then
-			output_type = "hex"
-		elseif output_type == "hex" then
-			output_type = "rgb"
-		end
-	end
+    if output_type == "rgb" then
+        output_type = "hsl"
+    elseif output_type == "hsl" then
+        output_type = "hex"
+    elseif output_type == "hex" then
+        output_type = "rgb"
+    end
 
 	update_output()
 end --}}}
@@ -406,9 +400,6 @@ local function toggle_transparency_slider() --{{{
 		api.nvim_win_set_width(win, win_width + potential_win_width)
 		api.nvim_win_set_height(win, win_height + 1)
 
-		if output_type == "hex" then
-			output_type = color_mode
-		end
 	else
 		transparency_mode = false
 
