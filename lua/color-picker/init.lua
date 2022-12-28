@@ -9,10 +9,10 @@ M.setup = utils_window.setup
 M.convert_cursor_color = utils_window.convert_cursor_color
 
 vim.api.nvim_create_user_command("PickColor", function()
-	utils_window.pop("normal")
+	pcall(utils_window.pop, "normal")
 end, {})
 vim.api.nvim_create_user_command("PickColorInsert", function()
-	utils_window.pop("insert")
+	pcall(utils_window.pop, "insert")
 end, {})
 vim.api.nvim_create_user_command("ConvertHEXandRGB", function()
 	utils_window.convert_cursor_color("rgb")
