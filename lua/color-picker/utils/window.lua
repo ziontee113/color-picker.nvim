@@ -567,7 +567,7 @@ end --}}}
 -------------------------------------
 
 local function detect_colors(str) --{{{
-	local hex_pattern = "#%x%x%x%x%x%x%x?%x?"
+	local hex_pattern = "#%x%x%x%x?%x?%x?%x?%x?"
 	local rgb_pattern = "rgba?%(%s*%d+%s*,%s*%d+%s*,%s*%d+%s*.*%)"
 	local hsl_pattern = "hsla?%(%s*%d+%s*,%s*%d+%s*%%*,%s*%d+%s*%%*.*%)"
 
@@ -633,6 +633,7 @@ end --}}}
 local function sandwich_processor(str) --{{{
 	local hex_capture_pattern = "#(%x%x%x%x%x%x)"
 	local hexa_capture_pattern = "#(%x%x%x%x%x%x)(%x%x)"
+  local short_hex_capture_pattern = "#(%x%x%x)"
 	local rgba_capture_pattern = "rgba%(%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*,?%s*(%d+%.?%d*)%s*%)"
 	local hsla_capture_pattern = "hsla%(%s*(%d+)%s*,%s*(%d+)%s*%%*,%s*(%d+)%s*%%,?%s*(%d+%.?%d*)%s*%)"
 	local rgb_capture_pattern = "rgb%(%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*,?%s*%)"
@@ -640,6 +641,7 @@ local function sandwich_processor(str) --{{{
 
 	local _, _, hex_val, hex_trans = string.find(str, hexa_capture_pattern)
 	local _, _, hex = string.find(str, hex_capture_pattern)
+	local _, _, short_hex = string.find(str, short_hex_capture_pattern)
 	local _, _, ra, ga, ba, rgba = string.find(str, rgba_capture_pattern)
 	local _, _, ha, sa, la, hsla = string.find(str, hsla_capture_pattern)
 	local _, _, r, g, b = string.find(str, rgb_capture_pattern)
@@ -648,6 +650,11 @@ local function sandwich_processor(str) --{{{
 		return { "hex", hex_val, hex_trans }
     elseif hex then
 		return { "hex", hex }
+  elseif short_hex then
+    local red = short_hex:sub(1, 1)
+    local green = short_hex:sub(2, 2)
+    local blue = short_hex:sub(3, 3)
+    return { "hex", red .. red .. green .. green .. blue .. blue }
 	elseif ra then
 		return { "rgb", tonumber(ra), tonumber(ga), tonumber(ba), tonumber(rgba) }
 	elseif ha then
