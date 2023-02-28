@@ -145,8 +145,7 @@ The project is licensed under MIT license. See [LICENSE](./LICENSE) file for det
 
 ## Credits
 
-### @max397574 for creating https://github.com/max397574/colortils.nvim.
-### I learned a lot how to do Neovim UI from his work.
----
-### @lars-vc for adding HEX transparency features [#17](https://github.com/ziontee113/color-picker.nvim/pull/17)
-```
+#### @max397574 for creating https://github.com/max397574/colortils.nvim.
+
+#### @lars-vc for adding HEX transparency features [#17](https://github.com/ziontee113/color-picker.nvim/pull/17)
+#### @Tired-Fox for adding shorthand HEX recognition [#21](https://github.com/ziontee113/color-picker.nvim/pull/21)
