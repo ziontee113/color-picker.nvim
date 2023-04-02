@@ -27,6 +27,7 @@ By default:
 - `h` and `l` will increment the color slider value by 1.
 - `u` and `i` / `a` and `d` / `A` and `D` will increment the slider value by 5.
 - `s` and `w` / `S` and `W` will increment the color slider value by 10.
+- `r` will switch between RGB and HSL modes, when choosing values.
 
 - Number `0` to `9` will set the slider at your cursor to certain percentages. 
   `0` sets to 0%, `9` sets to 90%, `5` sets to 50%.
