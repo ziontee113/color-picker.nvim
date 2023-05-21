@@ -28,6 +28,14 @@ use ({"ziontee113/color-picker.nvim",
 })
 ```
 
+For vim-plug
+
+```lua
+Plug 'ziontee113/color-picker.nvim'
+-- Initialize the plugin
+require('color-picker').setup()
+```
+
 ## Set Things Up:
 
 ```lua
